@@ -16,16 +16,7 @@ public partial class InventoryBrotherDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AspnetApplication> AspnetApplications { get; set; }
-    public virtual DbSet<AspnetMembership> AspnetMemberships { get; set; }
-    public virtual DbSet<AspnetPath> AspnetPaths { get; set; }
-    public virtual DbSet<AspnetPersonalizationAllUser> AspnetPersonalizationAllUsers { get; set; }
-    public virtual DbSet<AspnetPersonalizationPerUser> AspnetPersonalizationPerUsers { get; set; }
-    public virtual DbSet<AspnetProfile> AspnetProfiles { get; set; }
-    public virtual DbSet<AspnetRole> AspnetRoles { get; set; }
-    public virtual DbSet<AspnetSchemaVersion> AspnetSchemaVersions { get; set; }
-    public virtual DbSet<AspnetUser> AspnetUsers { get; set; }
-    public virtual DbSet<AspnetWebEventEvent> AspnetWebEventEvents { get; set; }
+    public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<DoctorInformation> DoctorInformations { get; set; }
     public virtual DbSet<CashAccount> CashAccounts { get; set; }
@@ -118,55 +109,7 @@ public partial class InventoryBrotherDbContext : DbContext
             // Since User said "new project", we assume we can generate new migration.
         }
 
-        // Configure Aspnet Identity Tables (Legacy) - Minimal config to keep them working if needed
-        modelBuilder.Entity<AspnetApplication>(entity =>
-        {
-            entity.HasKey(e => e.ApplicationId).IsClustered(false);
-            entity.Property(e => e.ApplicationId).HasDefaultValueSql("(newid())");
-        });
-        modelBuilder.Entity<AspnetMembership>(entity =>
-        {
-            entity.HasKey(e => e.UserId).IsClustered(false);
-            entity.Property(e => e.UserId).ValueGeneratedNever();
-        });
-        modelBuilder.Entity<AspnetPath>(entity =>
-        {
-            entity.HasKey(e => e.PathId).IsClustered(false);
-            entity.Property(e => e.PathId).HasDefaultValueSql("(newid())");
-        });
-        modelBuilder.Entity<AspnetPersonalizationAllUser>(entity =>
-        {
-            entity.HasKey(e => e.PathId);
-            entity.Property(e => e.PathId).ValueGeneratedNever();
-        });
-        modelBuilder.Entity<AspnetPersonalizationPerUser>(entity =>
-        {
-            entity.HasKey(e => e.Id).IsClustered(false);
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-        });
-        modelBuilder.Entity<AspnetProfile>(entity =>
-        {
-            entity.HasKey(e => e.UserId);
-            entity.Property(e => e.UserId).ValueGeneratedNever();
-        });
-        modelBuilder.Entity<AspnetRole>(entity =>
-        {
-            entity.HasKey(e => e.RoleId).IsClustered(false);
-            entity.Property(e => e.RoleId).HasDefaultValueSql("(newid())");
-        });
-        modelBuilder.Entity<AspnetSchemaVersion>(entity =>
-        {
-            entity.HasKey(e => new { e.Feature, e.CompatibleSchemaVersion });
-        });
-        modelBuilder.Entity<AspnetUser>(entity =>
-        {
-            entity.HasKey(e => e.UserId).IsClustered(false);
-            entity.Property(e => e.UserId).HasDefaultValueSql("(newid())");
-        });
-        modelBuilder.Entity<AspnetWebEventEvent>(entity =>
-        {
-            entity.HasKey(e => e.EventId);
-        });
+        // Aspnet Tables removed.
 
         OnModelCreatingPartial(modelBuilder);
     }

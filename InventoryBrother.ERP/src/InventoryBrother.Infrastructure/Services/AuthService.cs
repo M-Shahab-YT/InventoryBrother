@@ -2,7 +2,9 @@ using System.Security.Cryptography;
 using System.Text;
 using InventoryBrother.Application.Interfaces;
 using InventoryBrother.Infrastructure.Data;
+using InventoryBrother.Infrastructure.Data.Entities; // For User entity
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace InventoryBrother.Infrastructure.Services;
 
@@ -21,23 +23,52 @@ public class AuthService : IAuthService
 
     public async Task<bool> LoginAsync(string username, string password)
     {
-        var user = await _dbContext.AspnetUsers
-            .Include(u => u.AspnetMembership)
-            .FirstOrDefaultAsync(u => u.LoweredUserName == username.ToLower());
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() && u.IsActive);
 
-        if (user == null || user.AspnetMembership == null)
-            return false;
-
-        // Verify password (simplified for now, supporting hashed password format 1)
-        if (VerifyPassword(password, user.AspnetMembership.Password, user.AspnetMembership.PasswordSalt, user.AspnetMembership.PasswordFormat))
+        if (user == null)
         {
-            CurrentUserName = user.UserName;
-            CurrentUserId = user.UserId.ToString();
+            // Seed Admin user if no users exist (for first run dev convenience)
+            if (!await _dbContext.Users.AnyAsync())
+            {
+                user = await SeedAdminUserAsync();
+                if (user.Username.ToLower() != username.ToLower()) return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+        {
+            CurrentUserName = user.Username;
+            CurrentUserId = user.Id.ToString();
             CurrentStoreId = user.StoreId;
             return true;
         }
 
         return false;
+    }
+
+    private async Task<User> SeedAdminUserAsync()
+    {
+        var admin = new User
+        {
+            Username = "admin",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+            FirstName = "System",
+            LastName = "Admin",
+            Role = "Admin",
+            Email = "admin@inventorybrother.com",
+            StoreId = 1,
+            CreatedBy = "System",
+            CreatedAt = DateTime.Now
+        };
+
+        _dbContext.Users.Add(admin);
+        await _dbContext.SaveChangesAsync();
+        return admin;
     }
 
     public Task LogoutAsync()
@@ -49,20 +80,4 @@ public class AuthService : IAuthService
     }
 
     public bool IsLoggedIn() => !string.IsNullOrEmpty(CurrentUserName);
-
-    private bool VerifyPassword(string inputPassword, string storedPassword, string salt, int format)
-    {
-        // Format 1 = Hashed (SHA1 by default in old ASP.NET Membership)
-        if (format == 0) // Clear
-            return inputPassword == storedPassword;
-            
-        // Simplified hashing check for the walkthrough. In production, use the exact algorithm.
-        // Legacy SHA1 hashing logic:
-        var combined = salt + inputPassword;
-        using var sha1 = SHA1.Create();
-        var hashedBytes = sha1.ComputeHash(Encoding.Unicode.GetBytes(combined));
-        var hashedString = Convert.ToBase64String(hashedBytes);
-        
-        return hashedString == storedPassword;
-    }
 }
