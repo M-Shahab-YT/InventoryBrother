@@ -1,0 +1,72 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+        x:Class="InventoryBrother.Desktop.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding Title}"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext at runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <!-- <vm:MainWindowViewModel/> -->
+    </Design.DataContext>
+
+    <SplitView IsPaneOpen="True"
+               DisplayMode="CompactInline"
+               OpenPaneLength="250">
+        <SplitView.Pane>
+            <StackPanel Spacing="5" Margin="5">
+                <TextBlock Text="InventoryBrother" FontSize="20" FontWeight="Bold" Margin="10,20"/>
+                
+                <StackPanel Spacing="5">
+                    <Button Command="{Binding NavigateToSalesCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource cart_regular}"/>
+                            <TextBlock Text="Point of Sale"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToStockCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource box_regular}"/>
+                            <TextBlock Text="Inventory"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToPurchaseCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource box_regular}"/>
+                            <TextBlock Text="Purchases"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToReportsCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource box_regular}"/>
+                            <TextBlock Text="Finance/Reports"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </SplitView.Pane>
+
+        <Grid RowDefinitions="Auto, *">
+            <!-- Header -->
+            <Border Grid.Row="0" Height="50" Background="#EEEEEE" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                <Grid ColumnDefinitions="*, Auto" Margin="15,0">
+                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <TextBlock Text="Store: Main Branch" VerticalAlignment="Center" Foreground="#666666"/>
+                        <Separator Width="1" Height="20" Background="Gray"/>
+                        <TextBlock Text="User: Administrator" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content Area -->
+            <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        </Grid>
+    </SplitView>
+</Window>

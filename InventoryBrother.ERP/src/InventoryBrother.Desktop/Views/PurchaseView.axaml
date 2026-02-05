@@ -1,0 +1,89 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
+             x:Class="InventoryBrother.Desktop.Views.PurchaseView"
+             x:DataType="vm:PurchaseViewModel">
+
+    <Grid ColumnDefinitions="*, 350" Margin="15">
+        <!-- Left: Cart/Items -->
+        <Grid RowDefinitions="Auto, *, Auto" Grid.Column="0" Margin="0,0,15,0">
+            <StackPanel Grid.Row="0" Spacing="10" Margin="0,0,0,15">
+                <TextBlock Text="Add Products" FontSize="18" FontWeight="SemiBold"/>
+                <Grid ColumnDefinitions="*, Auto">
+                    <TextBox Watermark="Enter Product Code or Scan Barcode..." 
+                             Text="{Binding SearchBarCode}"
+                             KeyDown="SearchBar_KeyDown"/>
+                    <Button Grid.Column="1" Content="Add" Classes="accent" Command="{Binding AddProductCommand}" Margin="10,0,0,0"/>
+                </Grid>
+            </StackPanel>
+
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Items}"
+                       IsReadOnly="False"
+                       GridLinesVisibility="All"
+                       BorderThickness="1" BorderBrush="LightGray">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" IsReadOnly="True" Width="*"/>
+                    <DataGridTemplateColumn Header="Qty" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <NumericUpDown Value="{Binding Quantity}" Minimum="1"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Cost" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <NumericUpDown Value="{Binding PurchasePrice}" Minimum="0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Batch" Binding="{Binding BatchNo}" Width="100"/>
+                    <DataGridTemplateColumn Header="Actions" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Remove" Classes="danger" 
+                                        Command="{Binding $parent[UserControl].((vm:PurchaseViewModel)DataContext).RemoveItemCommand}"
+                                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!-- Right: Summary & Payment -->
+        <Border Grid.Column="1" Background="#F8F9FA" CornerRadius="8" Padding="20" BorderBrush="LightGray" BorderThickness="1">
+            <StackPanel Spacing="20">
+                <TextBlock Text="Purchase Summary" FontSize="20" FontWeight="Bold"/>
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Supplier Invoice #" Foreground="Gray"/>
+                    <TextBox Text="{Binding InvoiceNo}" Watermark="INV-12345"/>
+                </StackPanel>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Remarks" Foreground="Gray"/>
+                    <TextBox Text="{Binding Remarks}" Height="80" AcceptsReturn="True" Watermark="Optional notes..."/>
+                </StackPanel>
+
+                <Separator Background="LightGray"/>
+
+                <Grid ColumnDefinitions="*, Auto">
+                    <TextBlock Text="Total Payable:" FontSize="18"/>
+                    <TextBlock Grid.Column="1" Text="{Binding TotalAmount, StringFormat='N2'}" FontSize="18" FontWeight="Bold" Foreground="#2C3E50"/>
+                </Grid>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Amount Paid" FontSize="16"/>
+                    <NumericUpDown Value="{Binding AmountPaid}" FontSize="18" Minimum="0"/>
+                </StackPanel>
+
+                <Button Content="Submit Purchase" Classes="accent" Height="50" HorizontalAlignment="Stretch"
+                        Command="{Binding SubmitPurchaseCommand}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="InventoryBrother.Desktop.Views.CustomerView"
+             x:DataType="vm:CustomerViewModel">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Header / Search -->
+        <Border Grid.Row="0" Background="White" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="15">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <TextBox Width="300" Watermark="Search by name or mobile..." Text="{Binding SearchText}">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding LoadCustomersCommand}"/>
+                    </TextBox.KeyBindings>
+                </TextBox>
+                <Button Content="Search" Classes="accent" Command="{Binding LoadCustomersCommand}"/>
+                <Button Content="Clear" Command="{Binding ClearSearchCommand}"/>
+                <!-- Add Button Placeholder -->
+                <Button Content="New Customer" Classes="accent" IsEnabled="False"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Product List -->
+        <Grid Grid.Row="1" Margin="15">
+            <DataGrid ItemsSource="{Binding Customers}"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="1" BorderBrush="LightGray"
+                      CornerRadius="4">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="*"/>
+                    <DataGridTextColumn Header="Mobile Number" Binding="{Binding MobileNumber}" Width="150"/>
+                    <DataGridTextColumn Header="Contact Person" Binding="{Binding ContactPerson}" Width="150"/>
+                    <DataGridTextColumn Header="Address" Binding="{Binding CustomerAddress}" Width="200"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <ProgressBar IsVisible="{Binding IsBusy}" IsIndeterminate="True" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</UserControl>

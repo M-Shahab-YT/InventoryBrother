@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
+             x:Class="InventoryBrother.Desktop.Views.InventoryView"
+             x:DataType="vm:InventoryViewModel">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Toolbar / Search -->
+        <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="15">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <TextBox Width="300" 
+                         Watermark="Search by Name, Barcode or Code..." 
+                         Text="{Binding SearchText}"
+                         KeyDown="Search_KeyDown"/>
+                
+                <CheckBox Content="Low Stock Only" IsChecked="{Binding LowStockOnly}"/>
+                
+                <Button Content="Search" Classes="accent" Command="{Binding LoadProductsCommand}"/>
+                <Button Content="Clear" Command="{Binding ClearSearchCommand}"/>
+                <Button Content="Print" Command="{Binding PrintStockReportCommand}" Classes="accent"/>
+                
+                <Separator Width="1" Height="24" Margin="10,0"/>
+                
+                <Button Content="Add Product" Classes="accent"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Product List -->
+        <Grid Grid.Row="1" Margin="15">
+            <DataGrid ItemsSource="{Binding Products}"
+                       IsReadOnly="True"
+                       CanUserReorderColumns="True"
+                       CanUserResizeColumns="True"
+                       GridLinesVisibility="All"
+                       BorderThickness="1" BorderBrush="LightGray">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" Width="100"/>
+                    <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="*"/>
+                    <DataGridTextColumn Header="Barcode" Binding="{Binding ProductBarCode}" Width="150"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding SalePrice, StringFormat='N2'}" Width="100"/>
+                    <DataGridTemplateColumn Header="Stock" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CurrentStock, StringFormat='N2'}"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5,0"
+                                           Foreground="{Binding CurrentStock, Converter={StaticResource StockColorConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Min Qty" Binding="{Binding MinimumStockQty, StringFormat='N2'}" Width="100"/>
+                    <DataGridTemplateColumn Header="Actions" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+                                    <Button Content="Edit" Padding="5,2" FontSize="11"/>
+                                    <Button Content="Stock" Padding="5,2" FontSize="11"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <ProgressBar IsVisible="{Binding IsBusy}" IsIndeterminate="True" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</UserControl>
