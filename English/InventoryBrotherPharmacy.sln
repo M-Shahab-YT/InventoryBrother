@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Stock_System\Application.csproj", "{FFCB9618-F9F1-4660-BE00-C888E8AB6DA2}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InventoryBrotherPharmacy", "..\..\..\..\Setups & Publish\InventoryBrother\InventoryBrotherPharmacy\InventoryBrotherPharmacy.vdproj", "{854BEAE2-CFD3-492D-AF1B-A92CCCFDD403}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFCB9618-F9F1-4660-BE00-C888E8AB6DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFCB9618-F9F1-4660-BE00-C888E8AB6DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFCB9618-F9F1-4660-BE00-C888E8AB6DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFCB9618-F9F1-4660-BE00-C888E8AB6DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854BEAE2-CFD3-492D-AF1B-A92CCCFDD403}.Debug|Any CPU.ActiveCfg = Debug
+		{854BEAE2-CFD3-492D-AF1B-A92CCCFDD403}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
