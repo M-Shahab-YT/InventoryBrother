@@ -18,7 +18,10 @@ public partial class InventoryBrotherDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<DoctorInformation> DoctorInformations { get; set; }
+    // public virtual DbSet<DoctorInformation> DoctorInformations { get; set; } // DELETED
+    
+    // START CLEANUP
+    
     public virtual DbSet<CashAccount> CashAccounts { get; set; }
     public virtual DbSet<CashAccountTransaction> CashAccountTransactions { get; set; }
     public virtual DbSet<CashierBalance> CashierBalances { get; set; }
@@ -32,41 +35,38 @@ public partial class InventoryBrotherDbContext : DbContext
     public virtual DbSet<FinancialYearMonth> FinancialYearMonths { get; set; }
     public virtual DbSet<Payroll> Payrolls { get; set; }
     public virtual DbSet<Revenue> Revenues { get; set; }
-    public virtual DbSet<RevenueSetting> RevenueSettings { get; set; }
     public virtual DbSet<RevenueType> RevenueTypes { get; set; }
-    public virtual DbSet<SalesmanStatement> SalesmanStatements { get; set; }
     public virtual DbSet<SupplierStatement> SupplierStatements { get; set; }
 
     public virtual DbSet<Employee> Employees { get; set; }
+    public virtual DbSet<Department> Departments { get; set; } // NEW
+    public virtual DbSet<Attendance> Attendances { get; set; } // NEW
+    
     public virtual DbSet<PayrollMonth> PayrollMonths { get; set; }
-    public virtual DbSet<AveragePrice> AveragePrices { get; set; }
-    public virtual DbSet<BarcodeLabelSetting> BarcodeLabelSettings { get; set; }
+    
     public virtual DbSet<Brand> Brands { get; set; }
     public virtual DbSet<Color> Colors { get; set; }
     public virtual DbSet<Customer> Customers { get; set; }
     public virtual DbSet<StockDamage> StockDamages { get; set; }
-    public virtual DbSet<DatabaseBackupSetting> DatabaseBackupSettings { get; set; }
-    public virtual DbSet<DrugClassification> DrugClassifications { get; set; }
+    
     public virtual DbSet<Manufacturer> Manufacturers { get; set; }
-    public virtual DbSet<PrinterSetting> PrinterSettings { get; set; }
+    
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<ProductCategory> ProductCategories { get; set; }
-    public virtual DbSet<ProductGenericName> ProductGenericNames { get; set; }
     public virtual DbSet<ProductGroup> ProductGroups { get; set; }
     public virtual DbSet<ProductLocation> ProductLocations { get; set; }
-    public virtual DbSet<ProductOrigin> ProductOrigins { get; set; }
     public virtual DbSet<ProductPacking> ProductPackings { get; set; }
     public virtual DbSet<ProductTransfer> ProductTransfers { get; set; }
-    public virtual DbSet<ProductUnique> ProductUniques { get; set; }
+    
     public virtual DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
     public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
     public virtual DbSet<PurchaseReturn> PurchaseReturns { get; set; }
     public virtual DbSet<CustomerLoan> CustomerLoans { get; set; }
-    public virtual DbSet<Salesman> Salesmen { get; set; }
+    
     public virtual DbSet<SaleOrderItem> SaleOrderItems { get; set; }
     public virtual DbSet<SaleOrder> SaleOrders { get; set; }
     public virtual DbSet<SalesReturn> SalesReturns { get; set; }
-    public virtual DbSet<SalesSetting> SalesSettings { get; set; }
+    
     public virtual DbSet<Size> Sizes { get; set; }
     public virtual DbSet<Stock> Stocks { get; set; }
     public virtual DbSet<StockHistory> StockHistories { get; set; }
@@ -81,7 +81,6 @@ public partial class InventoryBrotherDbContext : DbContext
     public virtual DbSet<Month> Months { get; set; }
     public virtual DbSet<SaleReturnDetail> SaleReturnDetails { get; set; }
     public virtual DbSet<SaleReturnMain> SaleReturnMains { get; set; }
-    public virtual DbSet<SalemanStatementSummary> SalemanStatementSummaries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code.
