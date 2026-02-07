@@ -67,10 +67,14 @@ public partial class EmployeeViewModel : ViewModelBase
             {
                 await _employeeService.UpdateEmployeeAsync(SelectedEmployee);
                 // Refresh list or update item in place
-                var index = Employees.IndexOf(Employees.FirstOrDefault(e => e.Id == SelectedEmployee.Id));
-                if (index >= 0)
+                var itemToUpdate = Employees.FirstOrDefault(e => e.Id == SelectedEmployee.Id);
+                if (itemToUpdate != null)
                 {
-                    Employees[index] = SelectedEmployee;
+                    var index = Employees.IndexOf(itemToUpdate);
+                    if (index >= 0)
+                    {
+                        Employees[index] = SelectedEmployee;
+                    }
                 }
             }
             

@@ -53,7 +53,7 @@ public partial class LookupViewModel : ViewModelBase
             var result = await _lookupService.GetLookupsAsync(SelectedType);
             Lookups = new ObservableCollection<LookupDto>(result);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle error (maybe add ErrorMessage to ViewModelBase)
         }

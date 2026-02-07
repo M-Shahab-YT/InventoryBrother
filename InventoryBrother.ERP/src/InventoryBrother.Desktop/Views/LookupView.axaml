@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
              xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="InventoryBrother.Desktop.Views.LookupView"
              x:DataType="vm:LookupViewModel">
@@ -27,14 +28,30 @@
 
         <!-- Main Content: Lookup List -->
         <Grid Grid.Column="1" RowDefinitions="Auto, Auto, *">
-            <TextBlock Grid.Row="0" Text="{Binding SelectedType}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
-            
-            <!-- Quick Add -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
-                <TextBox Text="{Binding NewItemName}" Watermark="{loc:Localize EnterNewItemName}" Width="300"/>
-                <Button Content="{loc:Localize AddNew}" Command="{Binding AddLookupCommand}" Classes="primary"/>
-                <Button Content="{loc:Localize Refresh}" Command="{Binding LoadLookupsCommand}"/>
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="{Binding SelectedType}" FontSize="28" FontWeight="ExtraBold" Foreground="{StaticResource TextBrush}"/>
+                <TextBlock Text="Manage system categorizations and lookup values" FontSize="14" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0"/>
             </StackPanel>
+            
+            <!-- Actions -->
+            <Border Grid.Row="1" Classes="card" Padding="16" Margin="0,0,0,24">
+                <Grid ColumnDefinitions="*, Auto, Auto">
+                    <TextBox Text="{Binding NewItemName}" 
+                             Watermark="{loc:Localize EnterNewItemName}" 
+                             Classes="outline"
+                             MaxWidth="400"
+                             HorizontalAlignment="Left"/>
+                    
+                    <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="12">
+                        <Button Content="{loc:Localize AddNew}" 
+                                Command="{Binding AddLookupCommand}" 
+                                Classes="primary"/>
+                        <Button Content="{loc:Localize Refresh}" 
+                                Command="{Binding LoadLookupsCommand}"
+                                Classes="outline"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- Grid -->
             <Border Grid.Row="2" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
@@ -52,7 +69,7 @@
                                     <Button Command="{Binding $parent[UserControl].((vm:LookupViewModel)DataContext).DeleteLookupCommand}" 
                                             CommandParameter="{Binding}"
                                             Background="Transparent" BorderThickness="0">
-                                        <PathIcon Data="{StaticResource delete_regular}" Foreground="Red"/>
+                                        <matIcons:MaterialIcon Kind="Delete" Foreground="Red" Width="18"/>
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

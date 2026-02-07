@@ -9,7 +9,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks;
 
 namespace InventoryBrother.Desktop.ViewModels;
 
@@ -90,9 +89,9 @@ public partial class JournalEntryViewModel : ViewModelBase
             AddLine();
             AddLine();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            StatusMessage = $"Error: {ex.Message}";
+            // Handle error (maybe add ErrorMessage to ViewModelBase)
         }
     }
 }

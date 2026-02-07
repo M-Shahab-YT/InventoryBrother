@@ -63,10 +63,16 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsPashto => _localizationService.CurrentLanguage == "ps";
 
     [RelayCommand]
-    private void SetLanguage(string lang)
+    private void SetLanguage()
     {
-        _localizationService.SetLanguage(lang == "en" ? "ps" : "en"); // Toggle for simplicity or use parameter
+        var newLang = _localizationService.CurrentLanguage == "en" ? "ps" : "en";
+        _localizationService.SetLanguage(newLang);
+        
         OnPropertyChanged(nameof(IsPashto));
+        OnPropertyChanged(nameof(CurrentFlowDirection));
+        
+        // Refresh Title using localized common keys
+        Title = _localizationService["AppTitle"];
     }
 
     [RelayCommand]

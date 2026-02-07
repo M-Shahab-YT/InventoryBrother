@@ -3,68 +3,115 @@
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.InventoryView"
              x:DataType="vm:InventoryViewModel">
 
     <Grid RowDefinitions="Auto, *">
         <!-- Toolbar / Search -->
-        <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="15">
-            <StackPanel Orientation="Horizontal" Spacing="15">
-                <TextBox Width="300" 
-                         Watermark="Search by Name, Barcode or Code..." 
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,16">
+            <StackPanel Orientation="Horizontal" Spacing="20">
+                <TextBox Width="320" 
+                         mat:TextFieldAssist.Label="{loc:Localize Search}"
+                         Watermark="{loc:Localize EnterNewItemName}" 
                          Text="{Binding SearchText}"
-                         KeyDown="Search_KeyDown"/>
+                         Classes="outline"/>
                 
-                <CheckBox Content="Low Stock Only" IsChecked="{Binding LowStockOnly}"/>
+                <CheckBox Content="{loc:Localize inventory.LowStockOnly}" 
+                          IsChecked="{Binding LowStockOnly}" 
+                          VerticalAlignment="Center"/>
                 
-                <Button Content="Search" Classes="accent" Command="{Binding LoadProductsCommand}"/>
-                <Button Content="Clear" Command="{Binding ClearSearchCommand}"/>
-                <Button Content="Print" Command="{Binding PrintStockReportCommand}" Classes="accent"/>
+                <Button Command="{Binding LoadProductsCommand}" 
+                        Classes="Primary" 
+                        Padding="16,8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <matIcons:MaterialIcon Kind="Magnify" Width="18"/>
+                        <TextBlock Text="{loc:Localize Search}"/>
+                    </StackPanel>
+                </Button>
                 
-                <Separator Width="1" Height="24" Margin="10,0"/>
+                <Button Command="{Binding ClearSearchCommand}" 
+                        Classes="Outline" 
+                        Content="{loc:Localize Refresh}"
+                        BorderThickness="1"/>
                 
-                <Button Content="Add Product" Classes="accent"/>
+                <Separator Width="1" Height="24" Margin="10,0" Background="{StaticResource BorderBrush}"/>
+                
+                <Button Command="{Binding AddProductCommand}" 
+                        Classes="Primary"
+                        Background="#10B981"> <!-- Specific Success Green -->
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <matIcons:MaterialIcon Kind="Plus" Width="18" Foreground="White"/>
+                        <TextBlock Text="{loc:Localize inventory.AddProduct}"/>
+                    </StackPanel>
+                </Button>
+                
+                <Button Command="{Binding ExportToExcelCommand}" 
+                        Classes="Outline"
+                        BorderThickness="1">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <matIcons:MaterialIcon Kind="FileExport" Width="18"/>
+                        <TextBlock Text="{loc:Localize Export}"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 
         <!-- Product List -->
-        <Grid Grid.Row="1" Margin="15">
-            <DataGrid ItemsSource="{Binding Products}"
-                       IsReadOnly="True"
-                       CanUserReorderColumns="True"
-                       CanUserResizeColumns="True"
-                       GridLinesVisibility="All"
-                       BorderThickness="1" BorderBrush="LightGray">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" Width="100"/>
-                    <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="*"/>
-                    <DataGridTextColumn Header="Barcode" Binding="{Binding ProductBarCode}" Width="150"/>
-                    <DataGridTextColumn Header="Price" Binding="{Binding SalePrice, StringFormat='N2'}" Width="100"/>
-                    <DataGridTemplateColumn Header="Stock" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding CurrentStock, StringFormat='N2'}"
-                                           VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5,0"
-                                           Foreground="{Binding CurrentStock, Converter={StaticResource StockColorConverter}}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Min Qty" Binding="{Binding MinimumStockQty, StringFormat='N2'}" Width="100"/>
-                    <DataGridTemplateColumn Header="Actions" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                                    <Button Content="Edit" Padding="5,2" FontSize="11"/>
-                                    <Button Content="Stock" Padding="5,2" FontSize="11"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            
-            <ProgressBar IsVisible="{Binding IsBusy}" IsIndeterminate="True" VerticalAlignment="Top"/>
+        <Grid Grid.Row="1" Margin="24">
+            <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                <Panel>
+                    <DataGrid ItemsSource="{Binding Products}"
+                               IsReadOnly="True"
+                               GridLinesVisibility="Horizontal"
+                               BorderThickness="0"
+                               RowHeight="50">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding ProductCode}" Width="120"/>
+                            <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding ProductName}" Width="*"/>
+                            <DataGridTextColumn Header="{loc:Localize Barcode}" Binding="{Binding ProductBarCode}" Width="180"/>
+                            <DataGridTextColumn Header="{loc:Localize Price}" Binding="{Binding SalePrice, StringFormat='N2'}" Width="120"/>
+                            <DataGridTemplateColumn Header="{loc:Localize Stock}" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10,4" CornerRadius="6" HorizontalAlignment="Right"
+                                                Background="{Binding CurrentStock, Converter={StaticResource StockColorConverter}, ConverterParameter='Background'}">
+                                            <TextBlock Text="{Binding CurrentStock, StringFormat='N2'}"
+                                                       FontWeight="Bold"
+                                                       FontSize="13"
+                                                       Foreground="{Binding CurrentStock, Converter={StaticResource StockColorConverter}}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="{loc:Localize Actions}" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
+                                            <Button Classes="Outline" Padding="8,4" BorderThickness="1">
+                                                <matIcons:MaterialIcon Kind="Eye" Width="16" Foreground="{StaticResource PrimaryBrush}"/>
+                                            </Button>
+                                            <Button Classes="Outline" Padding="8,4" BorderThickness="1">
+                                                <matIcons:MaterialIcon Kind="Pencil" Width="16" Foreground="{StaticResource SecondaryBrush}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <ProgressBar IsVisible="{Binding IsBusy}" 
+                                 IsIndeterminate="True" 
+                                 VerticalAlignment="Top" 
+                                 Height="3"
+                                 Margin="0,0,0,0"/>
+                </Panel>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

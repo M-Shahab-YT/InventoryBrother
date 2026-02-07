@@ -4,6 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+        xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+        xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
         mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
         x:Class="InventoryBrother.Desktop.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -12,111 +15,159 @@
         WindowState="Maximized"
         FlowDirection="{Binding CurrentFlowDirection}">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext at runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <!-- <vm:MainWindowViewModel/> -->
-    </Design.DataContext>
+    <Panel>
+        <!-- 1. Login View (Full Screen) -->
+        <ContentControl Content="{Binding CurrentView}" 
+                        IsVisible="{Binding !IsLoggedIn}" />
 
-    <SplitView IsPaneOpen="True"
-               DisplayMode="CompactInline"
-               OpenPaneLength="250">
-        <SplitView.Pane>
-            <StackPanel Spacing="5" Margin="5" IsVisible="{Binding IsLoggedIn}">
-                <TextBlock Text="InventoryBrother" FontSize="20" FontWeight="Bold" Margin="10,20"/>
-                
-                <StackPanel Spacing="5">
-                    <Button Command="{Binding NavigateToDashboardCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource home_regular}"/>
-                            <TextBlock Text="{loc:Localize Dashboard}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToSalesCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource cart_regular}"/>
-                            <TextBlock Text="{loc:Localize POS}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToStockCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="{loc:Localize Inventory}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToPurchaseCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="{loc:Localize Purchases}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToReportsCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="{loc:Localize Finance}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToSuppliersCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource people_search_regular}"/>
-                            <TextBlock Text="{loc:Localize Suppliers}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToEmployeesCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource people_team_regular}"/>
-                            <TextBlock Text="{loc:Localize Employees}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToPayrollCommand}" HorizontalAlignment="Stretch" Padding="10">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource money_regular}"/>
-                            <TextBlock Text="{loc:Localize Payroll}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToAccountingCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource book_database_regular}"/> 
-                            <TextBlock Text="{loc:Localize Accounting}"/>
-                        </StackPanel>
-                    </Button>
-                     <!-- Settings / Lookups -->
-                    <Button Command="{Binding NavigateToLookupsCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource arrow_sync_regular}"/> <!-- Placeholder icon -->
-                            <TextBlock Text="{loc:Localize Settings}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToAuditLogsCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="{StaticResource list_regular}"/>
-                            <TextBlock Text="{loc:Localize AuditTrail}"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-        </SplitView.Pane>
-
-        <Grid RowDefinitions="Auto, *">
-            <!-- Header -->
-            <Border Grid.Row="0" Height="50" Background="#EEEEEE" BorderBrush="LightGray" BorderThickness="0,0,0,1">
-                <Grid ColumnDefinitions="*, Auto" Margin="15,0">
-                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                        <!-- Language Switcher -->
-                        <Button Content="English" Command="{Binding SetLanguageCommand}" CommandParameter="en" IsVisible="{Binding !IsPashto}"/>
-                        <Button Content="پښتو" Command="{Binding SetLanguageCommand}" CommandParameter="ps" IsVisible="{Binding IsPashto}"/>
-                        
-                        <TextBlock Text="Store: Main Branch" VerticalAlignment="Center" Foreground="#666666"/>
-                        <Separator Width="1" Height="20" Background="Gray"/>
-                        <TextBlock Text="{Binding UserName}" VerticalAlignment="Center" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding UserRole}" VerticalAlignment="Center" FontSize="10" Foreground="Gray"/>
+        <!-- 2. Main Authenticated Shell -->
+        <SplitView IsVisible="{Binding IsLoggedIn}"
+                   IsPaneOpen="True"
+                   DisplayMode="CompactInline"
+                   OpenPaneLength="260"
+                   PaneBackground="#004085">
+            <SplitView.Pane>
+                <DockPanel>
+                    <!-- Brand Section -->
+                    <StackPanel DockPanel.Dock="Top" Margin="24,32,24,32">
+                        <Border Background="White" Width="48" Height="48" CornerRadius="12" HorizontalAlignment="Left" Margin="0,0,0,20">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Opacity="0.1" OffsetX="0" OffsetY="4"/>
+                            </Border.Effect>
+                            <matIcons:MaterialIcon Kind="Box" Foreground="#0056b3" Width="24" Height="24"/>
+                        </Border>
+                        <TextBlock Text="InventoryBrother" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   LetterSpacing="-0.5"/>
+                        <TextBlock Text="ENTERPRISE EDITION" 
+                                   FontSize="9" 
+                                   FontWeight="Black"
+                                   LetterSpacing="1.5" 
+                                   Foreground="#A5B4FC" 
+                                   Opacity="0.6"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
-                </Grid>
-            </Border>
 
-            <!-- Main Content Area -->
-            <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
-        </Grid>
-    </SplitView>
+                    <ScrollViewer>
+                        <StackPanel Spacing="4" Margin="12,0">
+                            <!-- Dashboard -->
+                            <Button Command="{Binding NavigateToDashboardCommand}" 
+                                    Classes="nav" 
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='DashboardViewModel|#20FFFFFF|Transparent'}"
+                                    VerticalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="Home" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Dashboard}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- POS -->
+                            <Button Command="{Binding NavigateToSalesCommand}" 
+                                    Classes="nav"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='POSViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="ShoppingCart" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize POS}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Inventory -->
+                            <Button Command="{Binding NavigateToStockCommand}" 
+                                    Classes="nav"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='InventoryViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="PackageVariant" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Inventory}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Separator Height="1" Background="White" Opacity="0.1" Margin="12,16"/>
+
+                            <!-- HR/Employees -->
+                            <Button Command="{Binding NavigateToEmployeesCommand}" 
+                                    Classes="nav"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='EmployeeViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="AccountGroup" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Employees}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Suppliers -->
+                            <Button Command="{Binding NavigateToSuppliersCommand}" 
+                                    Classes="nav"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='SupplierViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="AccountSearch" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Suppliers}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Accounting -->
+                            <Button Command="{Binding NavigateToAccountingCommand}" 
+                                    Classes="nav" 
+                                    IsVisible="{Binding IsAdmin}"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='AccountingViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="Receipt" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Accounting}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Settings -->
+                            <Button Command="{Binding NavigateToLookupsCommand}" 
+                                    Classes="nav" 
+                                    IsVisible="{Binding IsAdmin}"
+                                    Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='LookupViewModel|#20FFFFFF|Transparent'}">
+                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                    <matIcons:MaterialIcon Kind="Settings" Foreground="White" Width="22" Height="22"/>
+                                    <TextBlock Text="{loc:Localize Settings}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </SplitView.Pane>
+
+            <Grid RowDefinitions="Auto, *">
+                <!-- Header -->
+        <Border Grid.Row="0" Height="64" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*, Auto" Margin="24,0">
+                <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                     <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="24" VerticalAlignment="Center">
+                    <!-- Toggle Language -->
+                    <Button Command="{Binding SetLanguageCommand}" 
+                            Classes="Outline" 
+                            Padding="12,6"
+                            BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="{StaticResource arrow_sync_regular}" Width="14" Foreground="{StaticResource PrimaryBrush}"/>
+                                    <TextBlock Text="EN" IsVisible="{Binding IsPashto}" FontWeight="Bold"/>
+                                    <TextBlock Text="پښتو" IsVisible="{Binding !IsPashto}" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="38" Height="38" CornerRadius="19" Background="{StaticResource PrimaryLightBrush}">
+                        <PathIcon Data="{StaticResource person_regular}" Width="18" Foreground="{StaticResource PrimaryBrush}"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                        <TextBlock Text="Admin User" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}"/>
+                        <TextBlock Text="Administrator" FontSize="11" Foreground="{StaticResource MutedTextBrush}"/>
+                    </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Main Content -->
+                <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Background="{StaticResource SurfaceBrush}"/>
+            </Grid>
+        </SplitView>
+    </Panel>
 </Window>

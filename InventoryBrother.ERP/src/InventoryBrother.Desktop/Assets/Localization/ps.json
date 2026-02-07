@@ -32,5 +32,8 @@
     "EnterNewItemName": "د نوي توکي نوم دننه کړئ",
     "ID": "آی ډي",
     "Name": "نوم",
-    "Actions": "کړنې"
+    "Actions": "کړنې",
+    "History": "تاریخچه",
+    "Search": "لټون",
+    "LowStockOnly": "یوازې کم سټاک"
 }

@@ -26,7 +26,7 @@ public class LocalizeExtension : MarkupExtension
         var binding = new Binding
         {
             Source = localizationService,
-            Path = $"Item[{Key}]",
+            Path = $"[{Key}]",
             Mode = BindingMode.OneWay
         };
 

@@ -4,122 +4,160 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:InventoryBrother.Desktop.ViewModels"
              xmlns:loc="using:InventoryBrother.Desktop.Extensions"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
 
-    <Grid RowDefinitions="Auto, *" Margin="20">
+    <Grid RowDefinitions="Auto, *" Margin="24">
         <!-- Header -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="20" Margin="0,0,0,20">
-            <TextBlock Text="{loc:Localize Dashboard}" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center"/>
-            <Button Command="{Binding LoadMetricsCommand}" Classes="outline" VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                    <PathIcon Data="{StaticResource arrow_sync_regular}"/>
-                    <TextBlock Text="{loc:Localize Refresh}"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="24" Margin="0,0,0,24">
+            <TextBlock Text="{loc:Localize dashboard.Title}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+            <Button Command="{Binding LoadMetricsCommand}" Classes="Outline" VerticalAlignment="Center" Padding="12,6" BorderThickness="1">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <matIcons:MaterialIcon Kind="Refresh" Width="18" Foreground="{StaticResource PrimaryBrush}"/>
+                    <TextBlock Text="{loc:Localize Refresh}" FontWeight="SemiBold"/>
                 </StackPanel>
             </Button>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="20">
+            <StackPanel Spacing="32">
                 <!-- Key Metrics Cards -->
                 <WrapPanel Orientation="Horizontal">
                     <!-- Total Sales Today -->
-                    <Border Width="200" Height="120" Background="#E3F2FD" CornerRadius="8" Padding="15" Margin="0,0,20,20">
-                        <StackPanel>
-                            <PathIcon Data="{StaticResource money_regular}" Foreground="#1565C0" HorizontalAlignment="Left" Width="24" Height="24"/>
-                            <TextBlock Text="{Binding Metrics.TotalSalesToday, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Margin="0,10,0,0" Foreground="#1565C0"/>
-                            <TextBlock Text="{loc:Localize SalesToday}" FontSize="14" Foreground="#555"/>
+                    <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Width="240" Height="130" Margin="0,0,20,20" Padding="20">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Background="#E0F2FE" CornerRadius="8" Padding="8">
+                                    <matIcons:MaterialIcon Kind="CurrencyUsd" Foreground="#0369A1" Width="18" Height="18"/>
+                                </Border>
+                                <TextBlock Text="{loc:Localize dashboard.SalesToday}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Metrics.TotalSalesToday, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Sales This Month -->
-                    <Border Width="200" Height="120" Background="#E8F5E9" CornerRadius="8" Padding="15" Margin="0,0,20,20">
-                        <StackPanel>
-                            <PathIcon Data="{StaticResource money_regular}" Foreground="#2E7D32" HorizontalAlignment="Left" Width="24" Height="24"/>
-                            <TextBlock Text="{Binding Metrics.TotalSalesMonth, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Margin="0,10,0,0" Foreground="#2E7D32"/>
-                            <TextBlock Text="{loc:Localize SalesMonth}" FontSize="14" Foreground="#555"/>
+                    <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Width="240" Height="130" Margin="0,0,20,20" Padding="20">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Background="#D1FAE5" CornerRadius="8" Padding="8">
+                                    <matIcons:MaterialIcon Kind="CurrencyUsd" Foreground="#047857" Width="18" Height="18"/>
+                                </Border>
+                                <TextBlock Text="{loc:Localize dashboard.SalesMonth}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Metrics.TotalSalesMonth, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
                         </StackPanel>
                     </Border>
 
                      <!-- Low Stock -->
-                    <Border Width="200" Height="120" Background="#FFEBEE" CornerRadius="8" Padding="15" Margin="0,0,20,20">
-                        <StackPanel>
-                            <PathIcon Data="{StaticResource warning_regular}" Foreground="#C62828" HorizontalAlignment="Left" Width="24" Height="24"/>
-                            <TextBlock Text="{Binding Metrics.LowStockItemsCount}" FontSize="24" FontWeight="Bold" Margin="0,10,0,0" Foreground="#C62828"/>
-                            <TextBlock Text="{loc:Localize LowStockItems}" FontSize="14" Foreground="#555"/>
+                    <Border Background="#FEF2F2" CornerRadius="12" BorderBrush="#FECACA" BorderThickness="1" Width="240" Height="130" Margin="0,0,20,20" Padding="20" IsVisible="{Binding Metrics.LowStockItemsCount}">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Background="#FEE2E2" CornerRadius="8" Padding="8">
+                                    <matIcons:MaterialIcon Kind="Alert" Foreground="#B91C1C" Width="18" Height="18"/>
+                                </Border>
+                                <TextBlock Text="{loc:Localize dashboard.LowStockItems}" FontSize="12" FontWeight="SemiBold" Foreground="#B91C1C" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Metrics.LowStockItemsCount}" FontSize="24" FontWeight="Bold" Foreground="#B91C1C"/>
                         </StackPanel>
                     </Border>
                     
                     <!-- Cash In Hand -->
-                    <Border Width="200" Height="120" Background="#FFF8E1" CornerRadius="8" Padding="15" Margin="0,0,20,20">
-                        <StackPanel>
-                            <PathIcon Data="{StaticResource wallet_regular}" Foreground="#F57F17" HorizontalAlignment="Left" Width="24" Height="24"/>
-                            <TextBlock Text="{Binding Metrics.CashInHand, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Margin="0,10,0,0" Foreground="#F57F17"/>
-                            <TextBlock Text="Cash In Hand" FontSize="14" Foreground="#555"/>
+                    <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Width="240" Height="130" Margin="0,0,20,20" Padding="20">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Background="#FEF3C7" CornerRadius="8" Padding="8">
+                                    <matIcons:MaterialIcon Kind="Wallet" Foreground="#B45309" Width="18" Height="18"/>
+                                </Border>
+                                <TextBlock Text="{loc:Localize dashboard.CashInHand}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Metrics.CashInHand, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
                         </StackPanel>
                     </Border>
                 </WrapPanel>
 
                 <!-- Sales Insights Section -->
-                <TextBlock Text="Sales Insights" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,0"/>
-                <Grid ColumnDefinitions="*, *">
-                    <!-- Top Products -->
-                    <Border Grid.Column="0" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,10,0">
-                        <StackPanel Spacing="10">
-                            <TextBlock Text="Top Selling Products" FontWeight="SemiBold" Foreground="#1565C0"/>
-                            <ItemsControl ItemsSource="{Binding Metrics.TopProducts}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid ColumnDefinitions="*, Auto" Margin="0,5">
-                                            <TextBlock Text="{Binding ProductName}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding TotalQty, StringFormat='{}{0:N0} units'}" FontWeight="Bold"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </Border>
+                <StackPanel Spacing="20">
+                    <TextBlock Text="{loc:Localize dashboard.PerformanceInsights}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                    <Grid ColumnDefinitions="*, *">
+                        <!-- Top Products -->
+                        <Border Grid.Column="0" Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24" Margin="0,0,10,0">
+                            <StackPanel Spacing="20">
+                                <TextBlock Text="{loc:Localize dashboard.TopSellingProducts}" FontSize="11" FontWeight="Black" LetterSpacing="1" Foreground="{StaticResource SecondaryBrush}"/>
+                                <ItemsControl ItemsSource="{Binding Metrics.TopProducts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="0,12">
+                                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                                    <Border Width="10" Height="10" CornerRadius="3" Background="{StaticResource PrimaryBrush}" Margin="0,0,16,0"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding ProductName}" FontWeight="SemiBold" FontSize="14" Foreground="{StaticResource TextBrush}"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding TotalQty, StringFormat='{}{0:N0} units'}" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
 
-                    <!-- Monthly Sales Trends -->
-                    <Border Grid.Column="1" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" Padding="15" Margin="10,0,0,0">
-                        <StackPanel Spacing="10">
-                            <TextBlock Text="Monthly Sales Hub" FontWeight="SemiBold" Foreground="#2E7D32"/>
-                            <ItemsControl ItemsSource="{Binding Metrics.SalesTrend}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid ColumnDefinitions="Auto, *, Auto" Margin="0,5">
-                                            <TextBlock Text="{Binding MonthName}" Width="50"/>
-                                            <ProgressBar Grid.Column="1" Value="{Binding SalesAmount}" Minimum="0" Maximum="100000" Height="10" Margin="10,0" Foreground="#4CAF50"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding SalesAmount, StringFormat='{}{0:C0}'}" FontSize="12"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </Border>
-                </Grid>
+                        <!-- Monthly Sales Trends -->
+                        <Border Grid.Column="1" Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24" Margin="10,0,0,0">
+                            <StackPanel Spacing="20">
+                                <TextBlock Text="{loc:Localize dashboard.RevenueTrends}" FontSize="11" FontWeight="Black" LetterSpacing="1" Foreground="{StaticResource SecondaryBrush}"/>
+                                <ItemsControl ItemsSource="{Binding Metrics.SalesTrend}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="8" Margin="0,8">
+                                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                                    <TextBlock Text="{Binding MonthName}" FontWeight="SemiBold" Width="80" Foreground="{StaticResource TextBrush}"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding SalesAmount, StringFormat='{}{0:C0}'}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                                                </Grid>
+                                                <ProgressBar Value="{Binding SalesAmount}" Minimum="0" Maximum="100000" Height="6" CornerRadius="3" Foreground="{StaticResource PrimaryBrush}" Background="{StaticResource SurfaceBrush}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
 
-                <!-- Alerts / Notifications Section -->
-                <Grid ColumnDefinitions="*, *" Margin="0,20,0,0">
-                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
-                        <TextBlock Text="System Status" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                        <Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="15">
-                             <StackPanel Spacing="10">
-                                 <TextBlock Text="System Online" Foreground="Green"/>
-                                 <TextBlock Text="Database Connected: SQL Server / SQLite"/>
-                                 <TextBlock Text="Last Backup: Never"/>
+                <!-- Quick Actions & Status -->
+                <Grid ColumnDefinitions="*, *" Margin="0,8,0,32">
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0" Spacing="16">
+                        <TextBlock Text="{loc:Localize dashboard.SystemOperations}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                        <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24">
+                             <StackPanel Spacing="16">
+                                 <Grid ColumnDefinitions="Auto, *">
+                                     <Ellipse Width="10" Height="10" Fill="#10B981" Margin="0,0,12,0"/>
+                                     <TextBlock Grid.Column="1" Text="Core Engine: Active" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                                 </Grid>
+                                 <TextBlock Text="Sync Status: Real-time Cloud Backup Enabled" FontSize="13" Foreground="{StaticResource MutedTextBrush}"/>
+                                 <TextBlock Text="{loc:Localize SystemStatus}" FontSize="13" Foreground="{StaticResource MutedTextBrush}"/>
                              </StackPanel>
                         </Border>
                     </StackPanel>
                     
-                     <StackPanel Grid.Column="1">
-                        <TextBlock Text="Quick Actions" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                        <Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="15">
+                     <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="16">
+                        <TextBlock Text="{loc:Localize dashboard.TerminalQuickLaunch}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                        <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24">
                              <WrapPanel Orientation="Horizontal">
-                                 <Button Command="{Binding NavigateToSaleCommand}" Content="New Sale" Margin="0,0,10,10" Classes="primary"/>
-                                 <Button Command="{Binding NavigateToProductCommand}" Content="Add Product" Margin="0,0,10,10"/>
-                                 <Button Content="Receive Stock" Margin="0,0,10,10"/>
+                                 <Button Command="{Binding NavigateToSaleCommand}" Classes="Primary" Margin="0,0,12,12" Height="45" Padding="24,0">
+                                     <StackPanel Orientation="Horizontal" Spacing="10">
+                                         <matIcons:MaterialIcon Kind="PlusCircle" Width="18" Foreground="White"/>
+                                         <TextBlock Text="{loc:Localize dashboard.NewInvoice}"/>
+                                     </StackPanel>
+                                 </Button>
+                                 <Button Command="{Binding NavigateToProductCommand}" Classes="Outline" Margin="0,0,12,12" Height="45" Padding="20,0" BorderThickness="1">
+                                      <StackPanel Orientation="Horizontal" Spacing="10">
+                                         <matIcons:MaterialIcon Kind="Package" Width="18" Foreground="{StaticResource PrimaryBrush}"/>
+                                         <TextBlock Text="{loc:Localize dashboard.ProductMgmt}"/>
+                                      </StackPanel>
+                                 </Button>
                              </WrapPanel>
                         </Border>
                     </StackPanel>

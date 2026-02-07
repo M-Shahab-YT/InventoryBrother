@@ -55,17 +55,46 @@ public class LocalizationService : ILocalizationService
     {
         try
         {
-            var uri = new Uri($"avares://InventoryBrother.Desktop/Assets/Localization/{languageCode}.json");
+            _translations = new Dictionary<string, string>();
             
-            using var stream = AssetLoader.Open(uri);
-            using var reader = new StreamReader(stream);
-            var json = reader.ReadToEnd();
-            _translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new();
+            // Define expected modules for now (safest for AOT/Embedded resources)
+            // In a full implementation, we could use AssetLoader.GetAssets if the platform supports it
+            var modules = new[] { "common", "pos", "inventory", "dashboard", "hr", "accounting" };
+            
+            foreach (var module in modules)
+            {
+                try 
+                {
+                    var uri = new Uri($"avares://InventoryBrother.Desktop/Assets/Localization/{languageCode}/{module}.json");
+                    if (!AssetLoader.Exists(uri)) continue;
+
+                    using var stream = AssetLoader.Open(uri);
+                    using var reader = new StreamReader(stream);
+                    var json = reader.ReadToEnd();
+                    var moduleData = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                    
+                    if (moduleData != null)
+                    {
+                        foreach (var kvp in moduleData)
+                        {
+                            // If it's common, add directly. Otherwise, prefix with module name.
+                            var key = module == "common" ? kvp.Key : $"{module}.{kvp.Key}";
+                            _translations[key] = kvp.Value;
+                            
+                            // Also keep the flat version for backward compatibility where unique
+                            if (!_translations.ContainsKey(kvp.Key))
+                            {
+                                _translations[kvp.Key] = kvp.Value;
+                            }
+                        }
+                    }
+                }
+                catch { /* Skip missing optional modules */ }
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading language {languageCode}: {ex.Message}");
-            _translations = new();
         }
     }
 

@@ -1,0 +1,15 @@
+{
+    "Title": "Dashboard",
+    "SalesToday": "Sales Today",
+    "SalesMonth": "Sales This Month",
+    "LowStockItems": "Low Stock Items",
+    "CashInHand": "Cash In Hand",
+    "QuickActions": "Quick Actions",
+    "PerformanceInsights": "Performance Insights",
+    "TopSellingProducts": "TOP SELLING PRODUCTS",
+    "RevenueTrends": "REVENUE TRENDS",
+    "SystemOperations": "System Operations",
+    "TerminalQuickLaunch": "Terminal Quick Launch",
+    "NewInvoice": "NEW INVOICE",
+    "ProductMgmt": "PRODUCT MGMT"
+}

@@ -3,123 +3,157 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.POSView"
              x:DataType="vm:POSViewModel">
     
-    <TabControl Margin="5">
-        <TabItem Header="New Sale">
-            <Grid ColumnDefinitions="*, 300" Margin="5">
+    <TabControl Margin="0">
+        <TabItem Header="{loc:Localize pos.NewSale}">
+            <Grid ColumnDefinitions="*, 360" Margin="24">
                 <!-- Left Side: Cart and Search -->
-                <DockPanel Grid.Column="0" Margin="0,0,10,0">
-                    <StackPanel DockPanel.Dock="Top" Spacing="5" Margin="0,0,0,10">
-                        <TextBlock Text="Point of Sale" FontSize="20" FontWeight="Bold"/>
+                <DockPanel Grid.Column="0" Margin="0,0,24,0">
+                    <StackPanel DockPanel.Dock="Top" Spacing="20" Margin="0,0,0,24">
+                        <TextBlock Text="{loc:Localize pos.Title}" FontSize="22" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
                         <Grid ColumnDefinitions="*, Auto">
-                            <TextBox Text="{Binding SearchBarCode}" Watermark="Scan Barcode or Search Product..." x:Name="SearchBox">
+                            <TextBox Text="{Binding SearchBarCode}" 
+                                     mat:TextFieldAssist.Label="{loc:Localize Search}"
+                                     Watermark="Scan Barcode or Search Product..." 
+                                     x:Name="SearchBox"
+                                     Classes="outline"
+                                     Height="50">
                                 <TextBox.KeyBindings>
                                     <KeyBinding Command="{Binding AddItemCommand}" Gesture="Enter"/>
                                 </TextBox.KeyBindings>
                             </TextBox>
-                            <Button Grid.Column="1" Content="Add" Command="{Binding AddItemCommand}" Margin="5,0,0,0"/>
+                            <Button Grid.Column="1" 
+                                    Command="{Binding AddItemCommand}" 
+                                    Classes="Primary" 
+                                    Margin="12,0,0,0"
+                                    Height="50"
+                                    Padding="24,0">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <matIcons:MaterialIcon Kind="Plus" Width="18" Foreground="White"/>
+                                    <TextBlock Text="{loc:Localize AddNew}"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </StackPanel>
                     
-                    <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" IsReadOnly="True" Width="*"/>
-                            <DataGridTemplateColumn Header="Qty">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <NumericUpDown Value="{Binding Quantity}" Minimum="1"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
-                            <DataGridTextColumn Header="Disc" Binding="{Binding Discount}"/>
-                            <DataGridTextColumn Header="Total" Binding="{Binding Total}" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                        <DataGrid ItemsSource="{Binding CartItems}" IsReadOnly="False" BorderThickness="0" GridLinesVisibility="Horizontal" RowHeight="50">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding ProductCode}" IsReadOnly="True" Width="100"/>
+                                <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding ProductName}" IsReadOnly="True" Width="*"/>
+                                <DataGridTemplateColumn Header="{loc:Localize Qty}" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <NumericUpDown Value="{Binding Quantity}" Minimum="1" BorderThickness="0" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="{loc:Localize Price}" Binding="{Binding Price}" Width="100"/>
+                                <DataGridTextColumn Header="{loc:Localize Total}" Binding="{Binding Total}" IsReadOnly="True" FontWeight="Bold" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
                 </DockPanel>
                 
                 <!-- Right Side: Totals and Payment -->
-                <Border Grid.Column="1" Background="#F5F5F5" CornerRadius="8" Padding="15">
-                    <StackPanel Spacing="10">
-                        <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold"/>
-                        <Separator/>
+                <Border Grid.Column="1" Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="{loc:Localize pos.OrderSummary}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                        <Separator Background="{StaticResource BorderBrush}"/>
                         
                         <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock Text="Grand Total:"/>
-                            <TextBlock Grid.Column="1" Text="{Binding GrandTotal, StringFormat='{}{0:N2}'}" FontWeight="Bold"/>
+                            <TextBlock Text="{loc:Localize pos.GrandTotal}" Foreground="{StaticResource MutedTextBrush}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding GrandTotal, StringFormat='{}{0:C}'}" FontWeight="Bold" FontSize="15"/>
                         </Grid>
                         
                         <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock Text="Total Discount:"/>
-                            <TextBlock Grid.Column="1" Text="{Binding TotalDiscount, StringFormat='{}{0:N2}'}" Foreground="Red"/>
+                            <TextBlock Text="{loc:Localize pos.TotalDiscount}" Foreground="{StaticResource MutedTextBrush}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding TotalDiscount, StringFormat='{}{0:C}'}" Foreground="#EF4444" FontWeight="SemiBold"/>
                         </Grid>
                         
-                        <Separator/>
+                        <Separator Background="{StaticResource BorderBrush}"/>
                         
                         <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock Text="NET TOTAL:" FontSize="20" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding NetTotal, StringFormat='{}{0:N2}'}" FontSize="20" FontWeight="Bold" Foreground="#2E7D32"/>
+                            <TextBlock Text="{loc:Localize pos.NetTotal}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding NetTotal, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Black" Foreground="#10B981"/>
                         </Grid>
                         
-                        <Panel Height="20"/>
+                        <Panel Height="16"/>
                         
-                        <TextBlock Text="Payment" FontSize="16" FontWeight="SemiBold"/>
-                        <TextBox Text="{Binding PaidAmount}" Watermark="Paid Amount" FontSize="18"/>
+                        <TextBlock Text="{loc:Localize pos.PaymentDetails}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBox Text="{Binding PaidAmount}" 
+                                 mat:TextFieldAssist.Label="{loc:Localize pos.PaidAmount}"
+                                 FontSize="22"
+                                 Height="60"
+                                 FontWeight="Black"
+                                 Classes="outline"/>
                         
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock Text="Change:"/>
-                            <TextBlock Grid.Column="1" Text="{Binding ChangeAmount, StringFormat='{}{0:N2}'}" FontSize="18" FontWeight="Bold"/>
+                        <Grid ColumnDefinitions="*, Auto" Margin="0,8">
+                            <TextBlock Text="{loc:Localize pos.ChangeDue}" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding ChangeAmount, StringFormat='{}{0:C}'}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
                         </Grid>
                         
-                        <Button Content="PROCESS SALE" 
-                                Command="{Binding ProcessSaleCommand}"
-                                HorizontalAlignment="Stretch" 
-                                HorizontalContentAlignment="Center"
-                                Padding="15" 
-                                Background="#2E7D32" 
-                                Foreground="White" 
+                        <Button Command="{Binding ProcessSaleCommand}"
+                                Classes="Primary"
+                                HorizontalAlignment="Stretch"
+                                Height="54"
+                                FontSize="18"
                                 FontWeight="Bold"
-                                IsEnabled="{Binding !IsBusy}"/>
+                                IsEnabled="{Binding !IsBusy}">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <matIcons:MaterialIcon Kind="CheckCircle" Width="20" Foreground="White"/>
+                                <TextBlock Text="{loc:Localize pos.ProcessSale}"/>
+                            </StackPanel>
+                        </Button>
                         
-                        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="#EF4444" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center" IsVisible="{Binding ErrorMessage}"/>
                     </StackPanel>
                 </Border>
             </Grid>
         </TabItem>
         
-        <TabItem Header="Transaction History">
-            <DockPanel Margin="10">
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,15">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="From:" VerticalAlignment="Center"/>
-                        <CalendarDatePicker SelectedDate="{Binding FromDate}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="To:" VerticalAlignment="Center"/>
-                        <CalendarDatePicker SelectedDate="{Binding ToDate}"/>
-                    </StackPanel>
-                    <Button Content="Search History" Command="{Binding LoadHistoryCommand}" Background="#1976D2" Foreground="White"/>
+        <TabItem Header="{loc:Localize pos.History}">
+            <DockPanel Margin="24">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16" Margin="0,0,0,24">
+                    <CalendarDatePicker SelectedDate="{Binding FromDate}" Height="40" Background="White" BorderBrush="{StaticResource BorderBrush}"/>
+                    <TextBlock Text="to" VerticalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource MutedTextBrush}"/>
+                    <CalendarDatePicker SelectedDate="{Binding ToDate}" Height="40" Background="White" BorderBrush="{StaticResource BorderBrush}"/>
+                    <Button Command="{Binding LoadHistoryCommand}" Classes="Primary" Padding="20,0" Height="40">
+                         <StackPanel Orientation="Horizontal" Spacing="8">
+                            <matIcons:MaterialIcon Kind="Magnify" Width="18"/>
+                            <TextBlock Text="{loc:Localize Search}"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
-                <Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
-                    <DataGrid ItemsSource="{Binding TransactionHistory}" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All">
+                <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <DataGrid ItemsSource="{Binding TransactionHistory}" IsReadOnly="True" BorderThickness="0" GridLinesVisibility="Horizontal" RowHeight="50">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="120"/>
-                            <DataGridTextColumn Header="Date" Binding="{Binding SaleDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
-                            <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
-                            <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N2}'}" Width="120"/>
-                            <DataGridTextColumn Header="Payment" Binding="{Binding PaymentMethod}" Width="100"/>
-                            <DataGridTemplateColumn Width="100">
+                            <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="140"/>
+                            <DataGridTextColumn Header="{loc:Localize Dashboard}" Binding="{Binding SaleDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="180"/>
+                            <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding CustomerName}" Width="*"/>
+                            <DataGridTextColumn Header="{loc:Localize Price}" Binding="{Binding TotalAmount, StringFormat='{}{0:C}'}" Width="140" FontWeight="Bold"/>
+                            <DataGridTemplateColumn Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Reprint" 
-                                                Command="{Binding $parent[UserControl].((vm:POSViewModel)DataContext).PrintInvoiceCommand}" 
+                                        <Button Command="{Binding $parent[UserControl].((vm:POSViewModel)DataContext).PrintInvoiceCommand}" 
                                                 CommandParameter="{Binding InvoiceNo}"
-                                                Padding="5,2" HorizontalAlignment="Center"/>
+                                                Classes="Outline"
+                                                Padding="12,4" 
+                                                BorderThickness="1"
+                                                HorizontalAlignment="Center">
+                                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <matIcons:MaterialIcon Kind="Printer" Width="18"/>
+                                                <TextBlock Text="{loc:Localize Print}" FontSize="11"/>
+                                            </StackPanel>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

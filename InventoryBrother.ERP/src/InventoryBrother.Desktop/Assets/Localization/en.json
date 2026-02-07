@@ -32,5 +32,8 @@
     "EnterNewItemName": "Enter new item name",
     "ID": "ID",
     "Name": "Name",
-    "Actions": "Actions"
+    "Actions": "Actions",
+    "History": "History",
+    "Search": "Search",
+    "LowStockOnly": "Low Stock Only"
 }
