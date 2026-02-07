@@ -13,6 +13,7 @@ public partial class InventoryViewModel : ViewModelBase
 {
     private readonly IProductService _productService;
     private readonly IReportService _reportService;
+    private readonly IExportService _exportService;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -20,12 +21,16 @@ public partial class InventoryViewModel : ViewModelBase
     [ObservableProperty]
     private bool _lowStockOnly;
 
+    [ObservableProperty]
+    private int? _selectedCategoryId;
+
     public ObservableCollection<ProductListDto> Products { get; } = new();
 
-    public InventoryViewModel(IProductService productService, IReportService reportService)
+    public InventoryViewModel(IProductService productService, IReportService reportService, IExportService exportService)
     {
         _productService = productService;
         _reportService = reportService;
+        _exportService = exportService;
         LoadProductsCommand.Execute(null);
     }
 
@@ -51,6 +56,28 @@ public partial class InventoryViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task ExportToExcelAsync()
+    {
+        SetBusy("Exporting to Excel...");
+        try
+        {
+            var data = Products.ToList();
+            var bytes = await _exportService.ExportToExcelAsync(data, "Inventory");
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"Inventory_{DateTime.Now:yyyyMMdd_HHmm}.csv");
+            await System.IO.File.WriteAllBytesAsync(tempPath, bytes);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            SetError("Export failed: " + ex.Message);
+        }
+        finally
+        {
+            ClearBusy();
+        }
+    }
+
+    [RelayCommand]
     private async Task LoadProductsAsync()
     {
         SetBusy("Loading inventory...");
@@ -59,7 +86,8 @@ public partial class InventoryViewModel : ViewModelBase
             var filter = new ProductSearchFilter
             {
                 SearchTerm = SearchText,
-                LowStockOnly = LowStockOnly
+                LowStockOnly = LowStockOnly,
+                CategoryId = SelectedCategoryId
             };
 
             var items = await _productService.GetProductsAsync(filter);
@@ -85,5 +113,34 @@ public partial class InventoryViewModel : ViewModelBase
         SearchText = string.Empty;
         LowStockOnly = false;
         LoadProductsCommand.Execute(null);
+    }
+
+    [RelayCommand]
+    private async Task AddProduct()
+    {
+        // Auto-generate a test product
+        var productCode = "SKU-" + DateTime.Now.Ticks.ToString().Substring(10);
+        
+        try 
+        {
+             var createDto = new CreateProductDto 
+             {
+                 ProductName = "New Product",
+                 ProductCode = productCode,
+                 Description = "New Quick Product",
+                 SalePrice = 0,
+                 CostPrice = 0,
+                 MinStockLevel = 5,
+                 CategoryId = 1, // Default
+                 UnitId = 1 // Default
+             };
+             
+             await _productService.CreateProductAsync(createDto);
+             await LoadProductsAsync();
+        }
+        catch(Exception ex)
+        {
+             SetError($"Failed to create: {ex.Message}");
+        }
     }
 }

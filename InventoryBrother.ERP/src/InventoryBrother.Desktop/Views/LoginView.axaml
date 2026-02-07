@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+             x:Class="InventoryBrother.Desktop.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Border Background="White" 
+            BorderBrush="LightGray" 
+            BorderThickness="1" 
+            CornerRadius="10" 
+            Width="350" 
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Center"
+            Padding="30"
+            BoxShadow="0 5 15 0 #20000000">
+        <StackPanel Spacing="20">
+            <TextBlock Text="{loc:Localize SignIn}" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"/>
+            
+            <StackPanel Spacing="5">
+                <TextBlock Text="{loc:Localize Username}" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding Username}" Watermark="{loc:Localize EnterUsername}"/>
+            </StackPanel>
+
+            <StackPanel Spacing="5">
+                <TextBlock Text="{loc:Localize Password}" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding Password}" 
+                         PasswordChar="*" 
+                         Watermark="{loc:Localize EnterPassword}"/>
+            </StackPanel>
+
+            <Button Content="{loc:Localize LoginButton}" 
+                    Command="{Binding LoginCommand}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Classes="primary"
+                    Padding="10"
+                    IsDefault="True"/>
+
+            <TextBlock Text="{Binding ErrorMessage}" 
+                       Foreground="Red" 
+                       HorizontalAlignment="Center"
+                       IsVisible="{Binding !!ErrorMessage}"/>
+
+            <ProgressBar IsIndeterminate="True" 
+                         IsVisible="{Binding IsBusy}"
+                         Height="2"
+                         Margin="0,10,0,0"/>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -7,5 +7,6 @@ public interface IProductService
     Task<List<ProductListDto>> GetProductsAsync(ProductSearchFilter filter);
     Task<ProductDetailDto?> GetProductDetailAsync(string productCode);
     Task<bool> UpdateProductAsync(ProductDetailDto product);
+    Task<string> CreateProductAsync(CreateProductDto product);
     Task<bool> AdjustStockAsync(StockAdjustmentDto adjustment, string userId, int storeId);
 }

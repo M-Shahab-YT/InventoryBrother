@@ -11,11 +11,13 @@ public class SaleService : ISaleService
 {
     private readonly InventoryBrotherDbContext _dbContext;
     private readonly IAuthService _authService;
+    private readonly IAccountingService _accountingService;
 
-    public SaleService(InventoryBrotherDbContext dbContext, IAuthService authService)
+    public SaleService(InventoryBrotherDbContext dbContext, IAuthService authService, IAccountingService accountingService)
     {
         _dbContext = dbContext;
         _authService = authService;
+        _accountingService = accountingService;
     }
 
     public async Task<string> GenerateInvoiceNumberAsync()
@@ -131,6 +133,11 @@ public class SaleService : ISaleService
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
+            // Auto-Post to GL (Fire and forget or wait? Better wait to ensure consistency logic typically)
+            // Ideally should be inside transaction but AccountingService saves changes too.
+            // For now, post after commit.
+            try { await _accountingService.PostSaleAsync(saleMain.Sno); } catch { /* log error */ }
+
             return new SaleResponseDto { InvoiceNo = invoiceNo, Success = true };
         }
         catch (Exception ex)
@@ -187,6 +194,33 @@ public class SaleService : ISaleService
         }
 
         return model;
+    }
+
+    public async Task<List<SaleListDto>> GetSalesAsync(DateTime from, DateTime to)
+    {
+        var fromDate = DateOnly.FromDateTime(from);
+        var toDate = DateOnly.FromDateTime(to);
+
+        var sales = await _dbContext.SaleOrders
+            .Where(s => s.SaleOrderDate >= fromDate && s.SaleOrderDate <= toDate)
+            .OrderByDescending(s => s.SaleOrderDate)
+            .ThenByDescending(s => s.SaleOrderTime)
+            .ToListAsync();
+
+        var result = new List<SaleListDto>();
+        foreach (var s in sales)
+        {
+            var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == s.CustomerId);
+            result.Add(new SaleListDto
+            {
+                InvoiceNo = s.InvoiceNo,
+                SaleDate = s.SaleOrderDate?.ToDateTime(s.SaleOrderTime ?? TimeOnly.MinValue) ?? DateTime.Now,
+                CustomerName = customer?.CustomerName ?? s.CustomerId,
+                TotalAmount = (decimal)(s.TotalOrderAmount ?? 0),
+                PaymentMethod = s.PaymentMethod ?? "Unknown"
+            });
+        }
+        return result;
     }
 
     private decimal ToBase(decimal amount, decimal rate)

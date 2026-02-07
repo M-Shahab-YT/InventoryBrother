@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("ImisTblUnitOfMeasurement")]
+
 public partial class UnitOfMeasurement : BaseEntity
 {
     [Key]

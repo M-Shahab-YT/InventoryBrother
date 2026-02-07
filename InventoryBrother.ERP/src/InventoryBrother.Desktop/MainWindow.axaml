@@ -3,12 +3,14 @@
         xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:loc="using:InventoryBrother.Desktop.Extensions"
         mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
         x:Class="InventoryBrother.Desktop.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="{Binding Title}"
+        Title="{loc:Localize AppTitle}"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        FlowDirection="{Binding CurrentFlowDirection}">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -20,32 +22,75 @@
                DisplayMode="CompactInline"
                OpenPaneLength="250">
         <SplitView.Pane>
-            <StackPanel Spacing="5" Margin="5">
+            <StackPanel Spacing="5" Margin="5" IsVisible="{Binding IsLoggedIn}">
                 <TextBlock Text="InventoryBrother" FontSize="20" FontWeight="Bold" Margin="10,20"/>
                 
                 <StackPanel Spacing="5">
+                    <Button Command="{Binding NavigateToDashboardCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource home_regular}"/>
+                            <TextBlock Text="{loc:Localize Dashboard}"/>
+                        </StackPanel>
+                    </Button>
                     <Button Command="{Binding NavigateToSalesCommand}" HorizontalAlignment="Stretch" Padding="10">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <PathIcon Data="{StaticResource cart_regular}"/>
-                            <TextBlock Text="Point of Sale"/>
+                            <TextBlock Text="{loc:Localize POS}"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding NavigateToStockCommand}" HorizontalAlignment="Stretch" Padding="10">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="Inventory"/>
+                            <TextBlock Text="{loc:Localize Inventory}"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding NavigateToPurchaseCommand}" HorizontalAlignment="Stretch" Padding="10">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="Purchases"/>
+                            <TextBlock Text="{loc:Localize Purchases}"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding NavigateToReportsCommand}" HorizontalAlignment="Stretch" Padding="10">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <PathIcon Data="{StaticResource box_regular}"/>
-                            <TextBlock Text="Finance/Reports"/>
+                            <TextBlock Text="{loc:Localize Finance}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToSuppliersCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource people_search_regular}"/>
+                            <TextBlock Text="{loc:Localize Suppliers}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToEmployeesCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource people_team_regular}"/>
+                            <TextBlock Text="{loc:Localize Employees}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToPayrollCommand}" HorizontalAlignment="Stretch" Padding="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource money_regular}"/>
+                            <TextBlock Text="{loc:Localize Payroll}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToAccountingCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource book_database_regular}"/> 
+                            <TextBlock Text="{loc:Localize Accounting}"/>
+                        </StackPanel>
+                    </Button>
+                     <!-- Settings / Lookups -->
+                    <Button Command="{Binding NavigateToLookupsCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource arrow_sync_regular}"/> <!-- Placeholder icon -->
+                            <TextBlock Text="{loc:Localize Settings}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToAuditLogsCommand}" HorizontalAlignment="Stretch" Padding="10" IsVisible="{Binding IsAdmin}">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="{StaticResource list_regular}"/>
+                            <TextBlock Text="{loc:Localize AuditTrail}"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -58,9 +103,14 @@
                 <Grid ColumnDefinitions="*, Auto" Margin="15,0">
                     <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="SemiBold"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <!-- Language Switcher -->
+                        <Button Content="English" Command="{Binding SetLanguageCommand}" CommandParameter="en" IsVisible="{Binding !IsPashto}"/>
+                        <Button Content="پښتو" Command="{Binding SetLanguageCommand}" CommandParameter="ps" IsVisible="{Binding IsPashto}"/>
+                        
                         <TextBlock Text="Store: Main Branch" VerticalAlignment="Center" Foreground="#666666"/>
                         <Separator Width="1" Height="20" Background="Gray"/>
-                        <TextBlock Text="User: Administrator" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding UserName}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding UserRole}" VerticalAlignment="Center" FontSize="10" Foreground="Gray"/>
                     </StackPanel>
                 </Grid>
             </Border>

@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("HrmisTblPayrollMonth")]
+
 public partial class PayrollMonth : BaseEntity
 {
     [Key]

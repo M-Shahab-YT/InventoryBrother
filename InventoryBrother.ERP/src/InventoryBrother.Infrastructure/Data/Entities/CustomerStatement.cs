@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("FmisTblCustomerStatement")]
+
 public partial class CustomerStatement : BaseEntity
 {
     [Key]

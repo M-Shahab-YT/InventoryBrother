@@ -16,6 +16,8 @@ public partial class Employee : BaseEntity
     public string Name { get; set; } = string.Empty;
 
     public int? DepartmentId { get; set; }
+    [ForeignKey("DepartmentId")]
+    public virtual Department? Department { get; set; }
 
     [MaxLength(100)]
     public string? Designation { get; set; }

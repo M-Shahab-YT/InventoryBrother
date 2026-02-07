@@ -8,4 +8,5 @@ public interface ISaleService
     Task<SaleResponseDto> CreateSaleAsync(CreateSaleDto saleDto);
     Task<string> GenerateInvoiceNumberAsync();
     Task<InvoiceModel?> GetInvoiceDetailsAsync(string invoiceNo);
+    Task<List<SaleListDto>> GetSalesAsync(DateTime from, DateTime to);
 }

@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("FmisTblRevenue")]
+
 public partial class Revenue : BaseEntity
 {
     [Key]

@@ -4,13 +4,21 @@
              xmlns:views="using:InventoryBrother.Desktop.Views"
              xmlns:conv="using:InventoryBrother.Desktop.Converters"
              x:Class="InventoryBrother.Desktop.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Resources>
         <conv:StockColorConverter x:Key="StockColorConverter"/>
+        <conv:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+        
+        <!-- Icons -->
         <StreamGeometry x:Key="cart_regular">M15.5,5H11l-1-2H2v2h6.1l3,6H5v2h9.1l0.8,4h2.1l-0.8-4H22V5H15.5z M19.9,7H12.1l-1-2h8.8V7z</StreamGeometry>
         <StreamGeometry x:Key="box_regular">M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5Z</StreamGeometry>
+        <StreamGeometry x:Key="money_regular">M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H10A1,1 0 0,1 9,15V13A1,1 0 0,1 10,12H13V10H9V9H10V7H12V8H13A1,1 0 0,1 14,9V11A1,1 0 0,1 13,12H10V14H14V15H13V17H11Z</StreamGeometry>
+        <StreamGeometry x:Key="arrow_sync_regular">M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z</StreamGeometry>
+        <StreamGeometry x:Key="warning_regular">M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16</StreamGeometry>
+        <StreamGeometry x:Key="wallet_regular">M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18M12,16H22V8H12M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z</StreamGeometry>
+        <StreamGeometry x:Key="book_database_regular">M19,2L14,6.5V17.5L19,13V2M6.5,5C4.55,5 2.45,5.4 1,6.5V21.16C1,21.41 1.25,21.54 1.5,21.44C2.71,20.88 4.36,20.5 6.5,20.5C8.61,20.5 10.72,20.94 12.5,21.78V6.94C10.72,6.1 8.61,5 6.5,5M19,15V19C19,19.33 18.89,19.64 18.7,19.9L13.5,16.5L19,15Z</StreamGeometry>
     </Application.Resources>
 
     <Application.DataTemplates>
@@ -29,8 +37,34 @@
         <DataTemplate DataType="{x:Type vm:CustomerViewModel}">
             <views:CustomerView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SupplierViewModel}">
             <views:SupplierView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EmployeeViewModel}">
+            <views:EmployeeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PayrollViewModel}">
+            <views:PayrollView/>
+        </DataTemplate>
+        
+        <!-- Accounting -->
+        <DataTemplate DataType="{x:Type vm:AccountingViewModel}">
+            <views:AccountingView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ChartOfAccountsViewModel}">
+            <views:ChartOfAccountsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:JournalEntryViewModel}">
+            <views:JournalEntryView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FinancialReportsViewModel}">
+            <views:FinancialReportsView/>
         </DataTemplate>
     </Application.DataTemplates>
 

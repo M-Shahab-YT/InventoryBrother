@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("ImisTblDamageOrLost")]
+
 public partial class StockDamage : BaseEntity
 {
     [Key]

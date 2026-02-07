@@ -36,5 +36,18 @@ public class ProductSearchFilter
 {
     public string? SearchTerm { get; set; }
     public int? CategoryId { get; set; }
+    public int? LocationId { get; set; }
     public bool LowStockOnly { get; set; }
+}
+
+public class CreateProductDto
+{
+    public string ProductCode { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public decimal SalePrice { get; set; }
+    public decimal CostPrice { get; set; }
+    public decimal MinStockLevel { get; set; }
+    public int CategoryId { get; set; }
+    public int UnitId { get; set; }
 }

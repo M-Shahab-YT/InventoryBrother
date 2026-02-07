@@ -34,3 +34,12 @@ public class SaleResponseDto
     public bool Success { get; set; }
     public string? Message { get; set; }
 }
+
+public class SaleListDto
+{
+    public string InvoiceNo { get; set; } = string.Empty;
+    public DateTime SaleDate { get; set; }
+    public string? CustomerName { get; set; }
+    public decimal TotalAmount { get; set; }
+    public string PaymentMethod { get; set; } = string.Empty;
+}

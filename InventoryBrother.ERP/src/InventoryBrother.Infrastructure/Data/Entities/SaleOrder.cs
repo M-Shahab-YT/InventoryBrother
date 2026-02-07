@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("ImisTblSaleOrderMain")]
+
 public partial class SaleOrder : BaseEntity
 {
     [Key]

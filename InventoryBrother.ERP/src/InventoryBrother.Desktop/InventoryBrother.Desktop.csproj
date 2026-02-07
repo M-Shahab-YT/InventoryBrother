@@ -18,13 +18,20 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InventoryBrother.Domain\InventoryBrother.Domain.csproj" />
     <ProjectReference Include="..\InventoryBrother.Application\InventoryBrother.Application.csproj" />
     <ProjectReference Include="..\InventoryBrother.Infrastructure\InventoryBrother.Infrastructure.csproj" />
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets\Localization\*.json" />
   </ItemGroup>
 </Project>

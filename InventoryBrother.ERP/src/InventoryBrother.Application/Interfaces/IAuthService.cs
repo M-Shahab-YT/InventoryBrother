@@ -7,5 +7,6 @@ public interface IAuthService
     bool IsLoggedIn();
     string? CurrentUserName { get; }
     string? CurrentUserId { get; }
+    string? CurrentUserRole { get; }
     int? CurrentStoreId { get; }
 }

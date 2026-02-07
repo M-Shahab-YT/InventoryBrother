@@ -7,84 +7,126 @@
              x:Class="InventoryBrother.Desktop.Views.POSView"
              x:DataType="vm:POSViewModel">
     
-    <Grid ColumnDefinitions="*, 300" Margin="10">
-        <!-- Left Side: Cart and Search -->
-        <DockPanel Grid.Column="0" Margin="0,0,10,0">
-            <StackPanel DockPanel.Dock="Top" Spacing="5" Margin="0,0,0,10">
-                <TextBlock Text="Point of Sale" FontSize="24" FontWeight="Bold"/>
-                <Grid ColumnDefinitions="*, Auto">
-                    <TextBox Text="{Binding SearchBarCode}" Watermark="Scan Barcode or Search Product..." x:Name="SearchBox">
-                        <TextBox.KeyBindings>
-                            <KeyBinding Command="{Binding AddItemCommand}" Gesture="Enter"/>
-                        </TextBox.KeyBindings>
-                    </TextBox>
-                    <Button Grid.Column="1" Content="Add" Command="{Binding AddItemCommand}" Margin="5,0,0,0"/>
-                </Grid>
-            </StackPanel>
-            
-            <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" IsReadOnly="True" Width="*"/>
-                    <DataGridTemplateColumn Header="Qty">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <NumericUpDown Value="{Binding Quantity}" Minimum="1"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
-                    <DataGridTextColumn Header="Disc" Binding="{Binding Discount}"/>
-                    <DataGridTextColumn Header="Total" Binding="{Binding Total}" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
+    <TabControl Margin="5">
+        <TabItem Header="New Sale">
+            <Grid ColumnDefinitions="*, 300" Margin="5">
+                <!-- Left Side: Cart and Search -->
+                <DockPanel Grid.Column="0" Margin="0,0,10,0">
+                    <StackPanel DockPanel.Dock="Top" Spacing="5" Margin="0,0,0,10">
+                        <TextBlock Text="Point of Sale" FontSize="20" FontWeight="Bold"/>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBox Text="{Binding SearchBarCode}" Watermark="Scan Barcode or Search Product..." x:Name="SearchBox">
+                                <TextBox.KeyBindings>
+                                    <KeyBinding Command="{Binding AddItemCommand}" Gesture="Enter"/>
+                                </TextBox.KeyBindings>
+                            </TextBox>
+                            <Button Grid.Column="1" Content="Add" Command="{Binding AddItemCommand}" Margin="5,0,0,0"/>
+                        </Grid>
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" IsReadOnly="True" Width="*"/>
+                            <DataGridTemplateColumn Header="Qty">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <NumericUpDown Value="{Binding Quantity}" Minimum="1"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                            <DataGridTextColumn Header="Disc" Binding="{Binding Discount}"/>
+                            <DataGridTextColumn Header="Total" Binding="{Binding Total}" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+                
+                <!-- Right Side: Totals and Payment -->
+                <Border Grid.Column="1" Background="#F5F5F5" CornerRadius="8" Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold"/>
+                        <Separator/>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="Grand Total:"/>
+                            <TextBlock Grid.Column="1" Text="{Binding GrandTotal, StringFormat='{}{0:N2}'}" FontWeight="Bold"/>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="Total Discount:"/>
+                            <TextBlock Grid.Column="1" Text="{Binding TotalDiscount, StringFormat='{}{0:N2}'}" Foreground="Red"/>
+                        </Grid>
+                        
+                        <Separator/>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="NET TOTAL:" FontSize="20" FontWeight="Bold"/>
+                            <TextBlock Grid.Column="1" Text="{Binding NetTotal, StringFormat='{}{0:N2}'}" FontSize="20" FontWeight="Bold" Foreground="#2E7D32"/>
+                        </Grid>
+                        
+                        <Panel Height="20"/>
+                        
+                        <TextBlock Text="Payment" FontSize="16" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding PaidAmount}" Watermark="Paid Amount" FontSize="18"/>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="Change:"/>
+                            <TextBlock Grid.Column="1" Text="{Binding ChangeAmount, StringFormat='{}{0:N2}'}" FontSize="18" FontWeight="Bold"/>
+                        </Grid>
+                        
+                        <Button Content="PROCESS SALE" 
+                                Command="{Binding ProcessSaleCommand}"
+                                HorizontalAlignment="Stretch" 
+                                HorizontalContentAlignment="Center"
+                                Padding="15" 
+                                Background="#2E7D32" 
+                                Foreground="White" 
+                                FontWeight="Bold"
+                                IsEnabled="{Binding !IsBusy}"/>
+                        
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
         
-        <!-- Right Side: Totals and Payment -->
-        <Border Grid.Column="1" Background="#F5F5F5" CornerRadius="8" Padding="15">
-            <StackPanel Spacing="10">
-                <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold"/>
-                <Separator/>
-                
-                <Grid ColumnDefinitions="*, Auto">
-                    <TextBlock Text="Grand Total:"/>
-                    <TextBlock Grid.Column="1" Text="{Binding GrandTotal, StringFormat='{}{0:N2}'}" FontWeight="Bold"/>
-                </Grid>
-                
-                <Grid ColumnDefinitions="*, Auto">
-                    <TextBlock Text="Total Discount:"/>
-                    <TextBlock Grid.Column="1" Text="{Binding TotalDiscount, StringFormat='{}{0:N2}'}" Foreground="Red"/>
-                </Grid>
-                
-                <Separator/>
-                
-                <Grid ColumnDefinitions="*, Auto">
-                    <TextBlock Text="NET TOTAL:" FontSize="20" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="1" Text="{Binding NetTotal, StringFormat='{}{0:N2}'}" FontSize="20" FontWeight="Bold" Foreground="#2E7D32"/>
-                </Grid>
-                
-                <Panel Height="20"/>
-                
-                <TextBlock Text="Payment" FontSize="16" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding PaidAmount}" Watermark="Paid Amount" FontSize="18"/>
-                
-                <Grid ColumnDefinitions="*, Auto">
-                    <TextBlock Text="Change:"/>
-                    <TextBlock Grid.Column="1" Text="{Binding ChangeAmount, StringFormat='{}{0:N2}'}" FontSize="18" FontWeight="Bold"/>
-                </Grid>
-                
-                <Button Content="PROCESS SALE" 
-                        Command="{Binding ProcessSaleCommand}"
-                        HorizontalAlignment="Stretch" 
-                        HorizontalContentAlignment="Center"
-                        Padding="15" 
-                        Background="#2E7D32" 
-                        Foreground="White" 
-                        FontWeight="Bold"
-                        IsEnabled="{Binding !IsBusy}"/>
-                
-                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
-            </StackPanel>
-        </Border>
-    </Grid>
+        <TabItem Header="Transaction History">
+            <DockPanel Margin="10">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,15">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="From:" VerticalAlignment="Center"/>
+                        <CalendarDatePicker SelectedDate="{Binding FromDate}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="To:" VerticalAlignment="Center"/>
+                        <CalendarDatePicker SelectedDate="{Binding ToDate}"/>
+                    </StackPanel>
+                    <Button Content="Search History" Command="{Binding LoadHistoryCommand}" Background="#1976D2" Foreground="White"/>
+                </StackPanel>
+
+                <Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+                    <DataGrid ItemsSource="{Binding TransactionHistory}" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="120"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding SaleDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
+                            <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
+                            <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N2}'}" Width="120"/>
+                            <DataGridTextColumn Header="Payment" Binding="{Binding PaymentMethod}" Width="100"/>
+                            <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Reprint" 
+                                                Command="{Binding $parent[UserControl].((vm:POSViewModel)DataContext).PrintInvoiceCommand}" 
+                                                CommandParameter="{Binding InvoiceNo}"
+                                                Padding="5,2" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </DockPanel>
+        </TabItem>
+    </TabControl>
 </UserControl>

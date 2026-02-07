@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("LookupTblCurrency")]
+
 public partial class Currency : BaseEntity
 {
     [Key]

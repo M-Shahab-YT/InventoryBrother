@@ -19,6 +19,7 @@ public class AuthService : IAuthService
 
     public string? CurrentUserName { get; private set; }
     public string? CurrentUserId { get; private set; }
+    public string? CurrentUserRole { get; private set; }
     public int? CurrentStoreId { get; private set; }
 
     public async Task<bool> LoginAsync(string username, string password)
@@ -44,6 +45,7 @@ public class AuthService : IAuthService
         {
             CurrentUserName = user.Username;
             CurrentUserId = user.Id.ToString();
+            CurrentUserRole = user.Role;
             CurrentStoreId = user.StoreId;
             return true;
         }
@@ -75,6 +77,7 @@ public class AuthService : IAuthService
     {
         CurrentUserName = null;
         CurrentUserId = null;
+        CurrentUserRole = null;
         CurrentStoreId = null;
         return Task.CompletedTask;
     }

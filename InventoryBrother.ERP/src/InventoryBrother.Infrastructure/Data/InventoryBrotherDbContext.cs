@@ -17,11 +17,95 @@ public partial class InventoryBrotherDbContext : DbContext
     }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
-    // public virtual DbSet<DoctorInformation> DoctorInformations { get; set; } // DELETED
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var auditEntries = OnBeforeSaveChanges();
+        var result = await base.SaveChangesAsync(cancellationToken);
+        await OnAfterSaveChanges(auditEntries);
+        return result;
+    }
+
+    private List<AuditEntry> OnBeforeSaveChanges()
+    {
+        ChangeTracker.DetectChanges();
+        var auditEntries = new List<AuditEntry>();
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.Entity is AuditLog || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                continue;
+
+            var auditEntry = new AuditEntry(entry);
+            auditEntry.TableName = entry.Entity.GetType().Name;
+            auditEntries.Add(auditEntry);
+
+            foreach (var property in entry.Properties)
+            {
+                string propertyName = property.Metadata.Name;
+                if (property.Metadata.IsPrimaryKey())
+                {
+                    auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                    continue;
+                }
+
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        auditEntry.Action = "Create";
+                        break;
+
+                    case EntityState.Deleted:
+                        auditEntry.OldValues[propertyName] = property.OriginalValue;
+                        auditEntry.Action = "Delete";
+                        break;
+
+                    case EntityState.Modified:
+                        if (property.IsModified)
+                        {
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            auditEntry.Action = "Update";
+                        }
+                        break;
+                }
+            }
+        }
+
+        foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
+        {
+            AuditLogs.Add(auditEntry.ToAudit());
+        }
+
+        return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
+    }
+
+    private Task OnAfterSaveChanges(List<AuditEntry> auditEntries)
+    {
+        if (auditEntries == null || auditEntries.Count == 0)
+            return Task.CompletedTask;
+
+        foreach (var auditEntry in auditEntries)
+        {
+            foreach (var prop in auditEntry.TemporaryProperties)
+            {
+                if (prop.Metadata.IsPrimaryKey())
+                {
+                    auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+                }
+                else
+                {
+                    auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+                }
+            }
+            AuditLogs.Add(auditEntry.ToAudit());
+        }
+
+        return SaveChangesAsync();
+    }
     
-    // START CLEANUP
-    
+    // START DBSET PROPERTIES
     public virtual DbSet<CashAccount> CashAccounts { get; set; }
     public virtual DbSet<CashAccountTransaction> CashAccountTransactions { get; set; }
     public virtual DbSet<CashierBalance> CashierBalances { get; set; }
@@ -29,6 +113,10 @@ public partial class InventoryBrotherDbContext : DbContext
     public virtual DbSet<CurrencyExchangeRate> CurrencyExchangeRates { get; set; }
     public virtual DbSet<CustomerStatement> CustomerStatements { get; set; }
     public virtual DbSet<EmployeeAdvanceSalary> EmployeeAdvanceSalaries { get; set; }
+
+    public virtual DbSet<JournalEntry> JournalEntries { get; set; }
+    public virtual DbSet<JournalEntryLine> JournalEntryLines { get; set; }
+
     public virtual DbSet<ExpenseDetail> ExpenseDetails { get; set; }
     public virtual DbSet<ExpenseHead> ExpenseHeads { get; set; }
     public virtual DbSet<FinancialYear> FinancialYears { get; set; }
@@ -60,12 +148,10 @@ public partial class InventoryBrotherDbContext : DbContext
     
     public virtual DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
     public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-    public virtual DbSet<PurchaseReturn> PurchaseReturns { get; set; }
     public virtual DbSet<CustomerLoan> CustomerLoans { get; set; }
     
     public virtual DbSet<SaleOrderItem> SaleOrderItems { get; set; }
     public virtual DbSet<SaleOrder> SaleOrders { get; set; }
-    public virtual DbSet<SalesReturn> SalesReturns { get; set; }
     
     public virtual DbSet<Size> Sizes { get; set; }
     public virtual DbSet<Stock> Stocks { get; set; }
@@ -83,8 +169,13 @@ public partial class InventoryBrotherDbContext : DbContext
     public virtual DbSet<SaleReturnMain> SaleReturnMains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code.
-        => optionsBuilder.UseSqlServer("Password=abc123@;Persist Security Info=True;User ID=sa;Initial Catalog=InventoryBrotherPharmacy;Data Source=.;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Password=abc123@;Persist Security Info=True;User ID=sa;Initial Catalog=InventoryBrother;Data Source=.;TrustServerCertificate=True");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -114,4 +205,34 @@ public partial class InventoryBrotherDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}
+
+internal class AuditEntry
+{
+    public AuditEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        Entry = entry;
+    }
+
+    public Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Entry { get; }
+    public string TableName { get; set; } = string.Empty;
+    public string Action { get; set; } = string.Empty;
+    public Dictionary<string, object> KeyValues { get; } = new();
+    public Dictionary<string, object> OldValues { get; } = new();
+    public Dictionary<string, object> NewValues { get; } = new();
+    public List<Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry> TemporaryProperties { get; } = new();
+
+    public bool HasTemporaryProperties => TemporaryProperties.Any();
+
+    public AuditLog ToAudit()
+    {
+        var audit = new AuditLog();
+        audit.TableName = TableName;
+        audit.Action = Action;
+        audit.Timestamp = DateTime.Now;
+        audit.PrimaryKey = System.Text.Json.JsonSerializer.Serialize(KeyValues);
+        audit.OldValues = OldValues.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(OldValues);
+        audit.NewValues = NewValues.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(NewValues);
+        return audit;
+    }
 }

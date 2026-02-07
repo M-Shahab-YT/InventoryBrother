@@ -35,13 +35,21 @@ public partial class POSViewModel : ViewModelBase
     [ObservableProperty]
     private decimal _changeAmount;
 
+    [ObservableProperty]
+    private DateTime _fromDate = DateTime.Now.AddDays(-7);
+
+    [ObservableProperty]
+    private DateTime _toDate = DateTime.Now;
+
     public ObservableCollection<CartItemViewModel> CartItems { get; } = new();
+    public ObservableCollection<SaleListDto> TransactionHistory { get; } = new();
 
     public POSViewModel(ISaleService saleService, ICatalogService catalogService, IPrintService printService)
     {
         _saleService = saleService;
         _catalogService = catalogService;
         _printService = printService;
+        LoadHistoryCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -158,6 +166,29 @@ public partial class POSViewModel : ViewModelBase
         catch (Exception ex)
         {
             SetError("Failed to print: " + ex.Message);
+        }
+        finally
+        {
+            ClearBusy();
+        }
+    }
+
+    [RelayCommand]
+    private async Task LoadHistoryAsync()
+    {
+        SetBusy("Loading transactions...");
+        try
+        {
+            var history = await _saleService.GetSalesAsync(FromDate, ToDate);
+            TransactionHistory.Clear();
+            foreach (var sale in history)
+            {
+                TransactionHistory.Add(sale);
+            }
+        }
+        catch (Exception ex)
+        {
+            SetError("Failed to load history: " + ex.Message);
         }
         finally
         {

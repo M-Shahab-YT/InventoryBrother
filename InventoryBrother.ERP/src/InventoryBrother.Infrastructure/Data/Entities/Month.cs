@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("LookupTblMonth")]
+
 public partial class Month : BaseEntity
 {
     [Key]

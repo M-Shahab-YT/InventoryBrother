@@ -109,6 +109,43 @@ public class ProductService : IProductService
         return true;
     }
 
+    public async Task<string> CreateProductAsync(CreateProductDto product)
+    {
+        var entity = new Product
+        {
+            ProductCode = product.ProductCode,
+            ProductName = product.ProductName,
+            ProductDescription = product.Description,
+            ProductCategoryId = product.CategoryId,
+            SalePrice = (double)product.SalePrice,
+            // CostPrice not in Product entity directly often, but let's assume 0 or derived
+            MinimumStockQty = (double)product.MinStockLevel,
+            CreatedAt = DateTime.Now,
+             // Defaults
+            Mrp = (double)product.SalePrice,
+            Discount = 0
+        };
+
+        _dbContext.Products.Add(entity);
+        await _dbContext.SaveChangesAsync();
+
+        // Initialize Stock
+        var stock = new Stock
+        {
+            ProductCode = entity.ProductCode,
+            Quantity = 0,
+            StockPrice = (double)product.CostPrice,
+            StoreId = 1, // Default
+            BatchNo = "INITIAL", // Required
+            ExpiryDate = DateTime.Now.AddYears(1) // Required
+            // ShelfNumber removed
+        };
+        _dbContext.Stocks.Add(stock);
+        await _dbContext.SaveChangesAsync();
+
+        return entity.ProductCode;
+    }
+
     public async Task<bool> AdjustStockAsync(StockAdjustmentDto adjustment, string userId, int storeId)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync();

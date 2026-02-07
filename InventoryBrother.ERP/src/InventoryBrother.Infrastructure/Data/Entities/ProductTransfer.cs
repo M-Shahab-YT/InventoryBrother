@@ -6,7 +6,7 @@ using InventoryBrother.Domain.Common;
 
 namespace InventoryBrother.Infrastructure.Data.Entities;
 
-[Table("ImisTblProductTransfer")]
+
 public partial class ProductTransfer : BaseEntity
 {
     [Key]

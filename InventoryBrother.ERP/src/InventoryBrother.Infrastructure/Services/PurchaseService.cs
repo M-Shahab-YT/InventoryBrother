@@ -9,10 +9,12 @@ namespace InventoryBrother.Infrastructure.Services;
 public class PurchaseService : IPurchaseService
 {
     private readonly InventoryBrotherDbContext _dbContext;
+    private readonly IAccountingService _accountingService;
 
-    public PurchaseService(InventoryBrotherDbContext dbContext)
+    public PurchaseService(InventoryBrotherDbContext dbContext, IAccountingService accountingService)
     {
         _dbContext = dbContext;
+        _accountingService = accountingService;
     }
 
     public async Task<string> GeneratePurchaseOrderNoAsync()
@@ -154,6 +156,8 @@ public class PurchaseService : IPurchaseService
 
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
+
+            try { await _accountingService.PostPurchaseAsync(main.Sno); } catch { /* log error */ }
 
             return new PurchaseResponseDto { Success = true, PurchaseOrderNo = poNo };
         }
