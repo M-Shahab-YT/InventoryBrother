@@ -40,6 +40,7 @@ public class LocalizationService : ILocalizationService
         
         // Notify all bindings that use the indexer "Item[]" has changed
         OnPropertyChanged("Item[]"); 
+        OnPropertyChanged("Item"); // For Avalonia indexer support 
     }
 
     public string Translate(string key)

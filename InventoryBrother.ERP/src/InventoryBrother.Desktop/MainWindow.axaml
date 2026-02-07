@@ -6,7 +6,6 @@
         xmlns:loc="using:InventoryBrother.Desktop.Extensions"
         xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
         xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
         mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
         x:Class="InventoryBrother.Desktop.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -57,7 +56,7 @@
                                     Classes="nav" 
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='DashboardViewModel|#20FFFFFF|Transparent'}"
                                     VerticalAlignment="Stretch">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="Home" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Dashboard}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -67,7 +66,7 @@
                             <Button Command="{Binding NavigateToSalesCommand}" 
                                     Classes="nav"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='POSViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="ShoppingCart" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize POS}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -77,7 +76,7 @@
                             <Button Command="{Binding NavigateToStockCommand}" 
                                     Classes="nav"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='InventoryViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="PackageVariant" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Inventory}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -89,7 +88,7 @@
                             <Button Command="{Binding NavigateToEmployeesCommand}" 
                                     Classes="nav"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='EmployeeViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="AccountGroup" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Employees}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -99,7 +98,7 @@
                             <Button Command="{Binding NavigateToSuppliersCommand}" 
                                     Classes="nav"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='SupplierViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="AccountSearch" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Suppliers}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -110,7 +109,7 @@
                                     Classes="nav" 
                                     IsVisible="{Binding IsAdmin}"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='AccountingViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="Receipt" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Accounting}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
@@ -121,7 +120,7 @@
                                     Classes="nav" 
                                     IsVisible="{Binding IsAdmin}"
                                     Background="{Binding CurrentView, Converter={StaticResource EqualityToBrushConverter}, ConverterParameter='LookupViewModel|#20FFFFFF|Transparent'}">
-                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel Orientation="Horizontal" Spacing="20">
                                     <matIcons:MaterialIcon Kind="Settings" Foreground="White" Width="22" Height="22"/>
                                     <TextBlock Text="{loc:Localize Settings}" Foreground="White" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>

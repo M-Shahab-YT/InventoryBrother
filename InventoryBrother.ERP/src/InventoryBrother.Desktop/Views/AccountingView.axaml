@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              xmlns:vm="clr-namespace:InventoryBrother.Desktop.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="InventoryBrother.Desktop.Views.AccountingView"
@@ -11,9 +12,9 @@
         <!-- Top Toolbar -->
         <Border Grid.Row="0" Background="#f8f9fa" Padding="10" BorderBrush="#e9ecef" BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Command="{Binding ShowChartOfAccountsCommand}" Content="Chart of Accounts" Classes="outline"/>
-                <Button Command="{Binding ShowJournalEntryCommand}" Content="Journal Entry" Classes="outline"/>
-                <Button Command="{Binding ShowReportsCommand}" Content="Financial Reports" Classes="outline"/>
+                <Button Command="{Binding ShowChartOfAccountsCommand}" Content="{loc:Localize accounting.ChartOfAccounts}" Classes="outline"/>
+                <Button Command="{Binding ShowJournalEntryCommand}" Content="{loc:Localize accounting.JournalEntry}" Classes="outline"/>
+                <Button Command="{Binding ShowReportsCommand}" Content="{loc:Localize accounting.FinancialReports}" Classes="outline"/>
             </StackPanel>
         </Border>
 

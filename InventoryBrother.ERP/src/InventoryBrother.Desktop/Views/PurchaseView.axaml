@@ -81,7 +81,7 @@
                     <NumericUpDown Value="{Binding AmountPaid}" FontSize="18" Minimum="0"/>
                 </StackPanel>
 
-                <Button Content="Submit Purchase" Classes="accent" Height="50" HorizontalAlignment="Stretch"
+                <Button Content="Submit Purchase" Classes="accent" HorizontalAlignment="Stretch"
                         Command="{Binding SubmitPurchaseCommand}"/>
             </StackPanel>
         </Border>

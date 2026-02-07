@@ -7,7 +7,6 @@
              xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="InventoryBrother.Desktop.App"
              RequestedThemeVariant="Light">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Resources>
         <conv:StockColorConverter x:Key="StockColorConverter"/>
@@ -50,7 +49,6 @@
             <views:PayrollView/>
         </DataTemplate>
         
-        <!-- Accounting -->
         <DataTemplate DataType="{x:Type vm:AccountingViewModel}">
             <views:AccountingView/>
         </DataTemplate>
@@ -64,16 +62,18 @@
             <views:FinancialReportsView/>
         </DataTemplate>
         
-        <!-- Settings & Lookups -->
         <DataTemplate DataType="{x:Type vm:LookupViewModel}">
             <views:LookupView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AuditLogViewModel}">
+            <views:AuditLogView/>
         </DataTemplate>
     </Application.DataTemplates>
 
     <Application.Styles>
         <themes:MaterialTheme PrimaryColor="Blue" SecondaryColor="Blue" />
         <matIcons:MaterialIconStyles />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <!-- <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/> -->
         <StyleInclude Source="avares://InventoryBrother.Desktop/Styles/Theme.axaml"/>
     </Application.Styles>
-</Application>
+</Application> 

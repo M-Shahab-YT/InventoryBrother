@@ -6,7 +6,6 @@
              xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
@@ -146,13 +145,13 @@
                         <TextBlock Text="{loc:Localize dashboard.TerminalQuickLaunch}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
                         <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="24">
                              <WrapPanel Orientation="Horizontal">
-                                 <Button Command="{Binding NavigateToSaleCommand}" Classes="Primary" Margin="0,0,12,12" Height="45" Padding="24,0">
+                                 <Button Command="{Binding NavigateToSaleCommand}" Classes="Primary" Margin="0,0,12,12" Padding="24,0">
                                      <StackPanel Orientation="Horizontal" Spacing="10">
                                          <matIcons:MaterialIcon Kind="PlusCircle" Width="18" Foreground="White"/>
                                          <TextBlock Text="{loc:Localize dashboard.NewInvoice}"/>
                                      </StackPanel>
                                  </Button>
-                                 <Button Command="{Binding NavigateToProductCommand}" Classes="Outline" Margin="0,0,12,12" Height="45" Padding="20,0" BorderThickness="1">
+                                 <Button Command="{Binding NavigateToProductCommand}" Classes="Outline" Margin="0,0,12,12" Padding="20,0" BorderThickness="1">
                                       <StackPanel Orientation="Horizontal" Spacing="10">
                                          <matIcons:MaterialIcon Kind="Package" Width="18" Foreground="{StaticResource PrimaryBrush}"/>
                                          <TextBlock Text="{loc:Localize dashboard.ProductMgmt}"/>

@@ -19,10 +19,36 @@ public partial class InventoryViewModel : ViewModelBase
     private string _searchText = string.Empty;
 
     [ObservableProperty]
-    private bool _lowStockOnly;
+    private int? _selectedCategoryId;
 
     [ObservableProperty]
-    private int? _selectedCategoryId;
+    private bool _isAddPanelOpen;
+
+    [ObservableProperty]
+    private CreateProductDto _newProduct = new();
+
+    private bool _lowStockOnly;
+
+    // Explicit property to ensure access if source generator is lagging
+    public bool LowStockOnly
+    {
+        get => _lowStockOnly;
+        set => SetProperty(ref _lowStockOnly, value);
+    }
+
+    [RelayCommand]
+    private void ToggleAddPanel()
+    {
+        IsAddPanelOpen = !IsAddPanelOpen;
+        if (IsAddPanelOpen)
+        {
+            NewProduct = new CreateProductDto { 
+                ProductCode = "SKU-" + DateTime.Now.Ticks.ToString().Substring(12),
+                CategoryId = 1,
+                UnitId = 1
+            };
+        }
+    }
 
     public ObservableCollection<ProductListDto> Products { get; } = new();
 
@@ -118,29 +144,20 @@ public partial class InventoryViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddProduct()
     {
-        // Auto-generate a test product
-        var productCode = "SKU-" + DateTime.Now.Ticks.ToString().Substring(10);
-        
+        SetBusy("Adding Product...");
         try 
         {
-             var createDto = new CreateProductDto 
-             {
-                 ProductName = "New Product",
-                 ProductCode = productCode,
-                 Description = "New Quick Product",
-                 SalePrice = 0,
-                 CostPrice = 0,
-                 MinStockLevel = 5,
-                 CategoryId = 1, // Default
-                 UnitId = 1 // Default
-             };
-             
-             await _productService.CreateProductAsync(createDto);
+             await _productService.CreateProductAsync(NewProduct);
+             IsAddPanelOpen = false;
              await LoadProductsAsync();
         }
         catch(Exception ex)
         {
              SetError($"Failed to create: {ex.Message}");
+        }
+        finally
+        {
+             ClearBusy();
         }
     }
 }

@@ -28,5 +28,18 @@
     "Stock": "Stock",
     "Qty": "Qty",
     "Print": "Print",
-    "Total": "Total"
+    "Total": "Total",
+    "LookupCategories": "Lookup Categories",
+    "lookup.Subtitle": "Manage system categorizations and lookup values",
+    "AuditTrail": "Audit Trail",
+    "Timestamp": "Timestamp",
+    "Table": "Table",
+    "Action": "Action",
+    "OldValues": "Old Values",
+    "NewValues": "New Values",
+    "Mobile": "Mobile Number",
+    "Address": "Address",
+    "ContactPerson": "Contact Person",
+    "Clear": "Clear",
+    "NewCustomer": "New Customer"
 }

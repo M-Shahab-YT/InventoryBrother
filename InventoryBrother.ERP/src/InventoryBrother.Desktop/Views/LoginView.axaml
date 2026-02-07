@@ -6,7 +6,6 @@
              xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.LoginView"
              x:DataType="vm:LoginViewModel">
@@ -52,14 +51,12 @@
                 <!-- Input Section -->
                 <StackPanel Spacing="24">
                     <TextBox Text="{Binding Username}" 
-                             UseFloatingWatermark="True"
                              mat:TextFieldAssist.Label="{loc:Localize Username}"
                              Watermark="{loc:Localize EnterUsername}"
                              Classes="outline"/>
                     
                     <TextBox Text="{Binding Password}" 
                              PasswordChar="*" 
-                             UseFloatingWatermark="True"
                              mat:TextFieldAssist.Label="{loc:Localize Password}"
                              Watermark="{loc:Localize EnterPassword}"
                              Classes="outline"/>
@@ -70,7 +67,6 @@
                         Content="{loc:Localize LoginButton}" 
                         Classes="Primary" 
                         HorizontalAlignment="Stretch"
-                        Height="48"
                         FontSize="15"
                         IsDefault="True"/>
 

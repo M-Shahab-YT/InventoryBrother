@@ -28,5 +28,18 @@
     "Stock": "سټاک",
     "Qty": "کمی",
     "Print": "چاپ",
-    "Total": "ټولټال"
+    "Total": "ټولټال",
+    "LookupCategories": "د لټون کټګورۍ",
+    "lookup.Subtitle": "د سیسټم کټګورۍ او د لټون ارزښتونه اداره کړئ",
+    "AuditTrail": "د پلټنې ریکارډ",
+    "Timestamp": "وخت",
+    "Table": "جدول",
+    "Action": "کړنه",
+    "OldValues": "پخواني ارزښتونه",
+    "NewValues": "نوي ارزښتونه",
+    "Mobile": "د اړیکې شمیره",
+    "Address": "پته",
+    "ContactPerson": "د اړیکې کس",
+    "Clear": "پاکول",
+    "NewCustomer": "نوی پیرودونکی"
 }

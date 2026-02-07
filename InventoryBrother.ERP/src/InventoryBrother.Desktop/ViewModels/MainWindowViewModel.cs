@@ -49,9 +49,14 @@ public partial class MainWindowViewModel : ViewModelBase
         
         // Update FlowDirection when language changes
         _localizationService.PropertyChanged += (s, e) => {
-            if (e.PropertyName == nameof(ILocalizationService.IsRightToLeft))
+            if (e.PropertyName == "Item[]") // This is triggered by SetLanguage via OnPropertyChanged("Item[]")
             {
                 OnPropertyChanged(nameof(CurrentFlowDirection));
+                OnPropertyChanged(nameof(IsPashto));
+                OnPropertyChanged(nameof(Title));
+                
+                // Refresh ViewModel Title based on current state
+                UpdateTitle();
             }
         };
 
@@ -71,8 +76,25 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IsPashto));
         OnPropertyChanged(nameof(CurrentFlowDirection));
         
-        // Refresh Title using localized common keys
-        Title = _localizationService["AppTitle"];
+        UpdateTitle();
+    }
+
+    private void UpdateTitle()
+    {
+        // Get the current base title from localization
+        string pageName = CurrentView?.GetType().Name switch
+        {
+            nameof(DashboardViewModel) => _localizationService["Dashboard"],
+            nameof(InventoryViewModel) => _localizationService["Inventory"],
+            nameof(POSViewModel) => _localizationService["POS"],
+            nameof(EmployeeViewModel) => _localizationService["Employees"],
+            nameof(SupplierViewModel) => _localizationService["Suppliers"],
+            nameof(AccountingViewModel) => _localizationService["Accounting"],
+            nameof(LookupViewModel) => _localizationService["Settings"],
+            _ => _localizationService["AppTitle"]
+        };
+
+        Title = $"{pageName} - {_localizationService["AppTitle"]}";
     }
 
     [RelayCommand]
@@ -136,7 +158,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var employeeViewModel = (ViewModelBase)_serviceProvider.GetService(typeof(EmployeeViewModel))!;
         CurrentView = employeeViewModel;
-        Title = "HR & Employee Management - InventoryBrother";
+        UpdateTitle();
     }
 
     [RelayCommand]

@@ -6,7 +6,6 @@
              xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:h="clr-namespace:Huskui.Avalonia.Controls;assembly=Huskui.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="InventoryBrother.Desktop.Views.InventoryView"
              x:DataType="vm:InventoryViewModel">
@@ -15,7 +14,7 @@
         <!-- Toolbar / Search -->
         <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,16">
             <StackPanel Orientation="Horizontal" Spacing="20">
-                <TextBox Width="320" 
+                <TextBox MaxWidth="320" 
                          mat:TextFieldAssist.Label="{loc:Localize Search}"
                          Watermark="{loc:Localize EnterNewItemName}" 
                          Text="{Binding SearchText}"
@@ -34,14 +33,14 @@
                     </StackPanel>
                 </Button>
                 
-                <Button Command="{Binding ClearSearchCommand}" 
+                <Button Command="{Binding LoadProductsCommand}" 
                         Classes="Outline" 
                         Content="{loc:Localize Refresh}"
                         BorderThickness="1"/>
                 
                 <Separator Width="1" Height="24" Margin="10,0" Background="{StaticResource BorderBrush}"/>
                 
-                <Button Command="{Binding AddProductCommand}" 
+                <Button Command="{Binding ToggleAddPanelCommand}" 
                         Classes="Primary"
                         Background="#10B981"> <!-- Specific Success Green -->
                     <StackPanel Orientation="Horizontal" Spacing="8">
@@ -69,7 +68,7 @@
                                IsReadOnly="True"
                                GridLinesVisibility="Horizontal"
                                BorderThickness="0"
-                               RowHeight="50">
+                               RowHeight="40">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding ProductCode}" Width="120"/>
                             <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding ProductName}" Width="*"/>
@@ -113,5 +112,49 @@
                 </Panel>
             </Border>
         </Grid>
+
+        <!-- Side Panel: Add Product -->
+        <Border Grid.Row="0" Grid.RowSpan="2" 
+                Width="400" 
+                HorizontalAlignment="Right"
+                Background="White"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1,0,0,0"
+                IsVisible="{Binding IsAddPanelOpen}"
+                ZIndex="100">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Opacity="0.1" OffsetX="-5" OffsetY="0"/>
+            </Border.Effect>
+            
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Height="64" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,0">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <TextBlock Text="{loc:Localize inventory.AddProduct}" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                        <Button Grid.Column="1" Command="{Binding ToggleAddPanelCommand}" Background="Transparent" BorderThickness="0" Padding="8">
+                            <matIcons:MaterialIcon Kind="Close" Width="20" Foreground="{StaticResource MutedTextBrush}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                
+                <ScrollViewer Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize Name}" Text="{Binding NewProduct.ProductName}" Classes="outline"/>
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize Barcode}" Text="{Binding NewProduct.ProductCode}" Classes="outline"/>
+                        <Grid ColumnDefinitions="*, *">
+                            <TextBox Grid.Column="0" mat:TextFieldAssist.Label="{loc:Localize inventory.CostPrice}" Text="{Binding NewProduct.CostPrice}" Margin="0,0,10,0" Classes="outline"/>
+                            <TextBox Grid.Column="1" mat:TextFieldAssist.Label="{loc:Localize inventory.SalePrice}" Text="{Binding NewProduct.SalePrice}" Classes="outline"/>
+                        </Grid>
+                        <!-- <ComboBox mat:TextFieldAssist.Label="{loc:Localize inventory.Category}" HorizontalAlignment="Stretch"/> -->
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize inventory.MinStock}" Text="{Binding NewProduct.MinStockLevel}" Classes="outline"/>
+                        
+                        <Border Height="40"/>
+                        
+                        <Button Command="{Binding AddProductCommand}" Classes="Primary" HorizontalAlignment="Stretch">
+                            <TextBlock Text="{loc:Localize AddNew}"/>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
     </Grid>
 </UserControl>

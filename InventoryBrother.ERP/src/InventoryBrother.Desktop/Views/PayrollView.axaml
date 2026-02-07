@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="InventoryBrother.Desktop.Views.PayrollView"
              x:DataType="vm:PayrollViewModel">
@@ -11,15 +12,15 @@
         <!-- Toolbar -->
         <Border Grid.Row="0" Padding="10" Background="{DynamicResource SurfaceBrush}">
             <StackPanel Orientation="Horizontal" Spacing="15">
-                <TextBlock Text="Payroll" Classes="h1" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="{loc:Localize hr.Payroll}" Classes="h1" VerticalAlignment="Center" Margin="0,0,20,0"/>
 
-                <TextBlock Text="Month:" VerticalAlignment="Center"/>
-                <ComboBox ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonth}" Width="80"/>
+                <TextBlock Text="{loc:Localize hr.Month}" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonth}" MinWidth="120" Classes="outline"/>
 
-                <TextBlock Text="Year:" VerticalAlignment="Center"/>
-                <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Width="100"/>
+                <TextBlock Text="{loc:Localize hr.Year}" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" MinWidth="100" Classes="outline"/>
 
-                <Button Command="{Binding GeneratePayrollCommand}" Content="Generate / Refresh" Classes="accent"/>
+                <Button Command="{Binding GeneratePayrollCommand}" Content="{loc:Localize hr.Generate}" Classes="Primary"/>
                 <!-- <Button Command="{Binding LoadPayrollCommand}" Content="Load Existing" /> -->
             </StackPanel>
         </Border>
@@ -28,14 +29,14 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding PayrollList}" 
                   AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Emp ID" Binding="{Binding EmployeeId}" Width="80"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}" Width="200"/>
-                <DataGridTextColumn Header="Designation" Binding="{Binding Designation}" Width="150"/>
-                <DataGridTextColumn Header="Basic" Binding="{Binding BasicSalary, StringFormat={}{0:C}}" Width="100"/>
-                <DataGridTextColumn Header="Allowances" Binding="{Binding Allowance, StringFormat={}{0:C}}" Width="100"/>
-                <DataGridTextColumn Header="Deductions" Binding="{Binding Deduction, StringFormat={}{0:C}}" Width="100"/>
-                <DataGridTextColumn Header="Net Salary" Binding="{Binding NetSalary, StringFormat={}{0:C}}" Width="120" FontWeight="Bold"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding EmployeeId}" Width="80"/>
+                <DataGridTextColumn Header="{loc:Localize hr.Name}" Binding="{Binding EmployeeName}" Width="200"/>
+                <DataGridTextColumn Header="{loc:Localize hr.Designation}" Binding="{Binding Designation}" Width="150"/>
+                <DataGridTextColumn Header="{loc:Localize hr.BasicSalary}" Binding="{Binding BasicSalary, StringFormat='{}{0:C}'}" Width="100"/>
+                <DataGridTextColumn Header="{loc:Localize hr.Allowances}" Binding="{Binding Allowance, StringFormat='{}{0:C}'}" Width="100"/>
+                <DataGridTextColumn Header="{loc:Localize hr.Deductions}" Binding="{Binding Deduction, StringFormat='{}{0:C}'}" Width="100"/>
+                <DataGridTextColumn Header="{loc:Localize hr.NetSalary}" Binding="{Binding NetSalary, StringFormat='{}{0:C}'}" Width="120" FontWeight="Bold"/>
+                <DataGridTextColumn Header="{loc:Localize Status}" Binding="{Binding Status}" Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
 

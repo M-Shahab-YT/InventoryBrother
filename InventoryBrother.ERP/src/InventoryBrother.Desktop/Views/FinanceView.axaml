@@ -3,6 +3,7 @@
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
              x:Class="InventoryBrother.Desktop.Views.FinanceView"
              x:DataType="vm:FinanceViewModel">
@@ -11,7 +12,7 @@
         <!-- Sidebar: Accounts & Controls -->
         <Border Grid.Column="0" Background="#F8F9FA" CornerRadius="8" Padding="15" BorderBrush="LightGray" BorderThickness="1" Margin="0,0,15,0">
             <StackPanel Spacing="20">
-                <TextBlock Text="Cash Accounts" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Text="{loc:Localize accounting.CashAccounts}" FontSize="18" FontWeight="Bold"/>
                 
                 <ItemsControl ItemsSource="{Binding CashAccounts}">
                     <ItemsControl.ItemTemplate>
@@ -28,17 +29,17 @@
 
                 <Separator Background="LightGray"/>
 
-                <TextBlock Text="Reports" FontSize="18" FontWeight="Bold"/>
-                <Button Content="Daily Sales Report" Command="{Binding PrintSalesReportCommand}" HorizontalAlignment="Stretch" Classes="accent"/>
-                <Button Content="Customer Statement" Command="{Binding LoadCustomerStatementCommand}" HorizontalAlignment="Stretch"/>
-                <Button Content="Supplier Statement" Command="{Binding LoadSupplierStatementCommand}" HorizontalAlignment="Stretch"/>
+                <TextBlock Text="{loc:Localize accounting.Reports}" FontSize="18" FontWeight="Bold"/>
+                <Button Content="{loc:Localize accounting.DailySalesReport}" Command="{Binding PrintSalesReportCommand}" HorizontalAlignment="Stretch" Classes="accent"/>
+                <Button Content="{loc:Localize accounting.CustomerStatement}" Command="{Binding LoadCustomerStatementCommand}" HorizontalAlignment="Stretch"/>
+                <Button Content="{loc:Localize accounting.SupplierStatement}" Command="{Binding LoadSupplierStatementCommand}" HorizontalAlignment="Stretch"/>
             </StackPanel>
         </Border>
 
         <!-- Main Content: Statement Table -->
         <Grid Grid.Column="1" RowDefinitions="Auto, *">
             <Border Grid.Row="0" Background="White" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="0,0,0,15">
-                <TextBlock Text="Transaction Statement" FontSize="20" FontWeight="Bold"/>
+                <TextBlock Text="{loc:Localize accounting.TransactionStatement}" FontSize="20" FontWeight="Bold"/>
             </Border>
 
             <DataGrid Grid.Row="1" ItemsSource="{Binding Statement}"
@@ -46,12 +47,12 @@
                        GridLinesVisibility="Horizontal"
                        BorderThickness="1" BorderBrush="LightGray" Margin="0,15,0,0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='d'}" Width="100"/>
-                    <DataGridTextColumn Header="Reference" Binding="{Binding ReferenceNumber}" Width="120"/>
-                    <DataGridTextColumn Header="Particulars" Binding="{Binding Particulars}" Width="*"/>
-                    <DataGridTextColumn Header="Debit" Binding="{Binding Debit, StringFormat='N2'}" Width="100"/>
-                    <DataGridTextColumn Header="Credit" Binding="{Binding Credit, StringFormat='N2'}" Width="100"/>
-                    <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat='N2'}" Width="120" FontWeight="Bold"/>
+                    <DataGridTextColumn Header="{loc:Localize Date}" Binding="{Binding Date, StringFormat='d'}" Width="100"/>
+                    <DataGridTextColumn Header="{loc:Localize Reference}" Binding="{Binding ReferenceNumber}" Width="120"/>
+                    <DataGridTextColumn Header="{loc:Localize accounting.Particulars}" Binding="{Binding Particulars}" Width="*"/>
+                    <DataGridTextColumn Header="{loc:Localize accounting.Debit}" Binding="{Binding Debit, StringFormat='N2'}" Width="100"/>
+                    <DataGridTextColumn Header="{loc:Localize accounting.Credit}" Binding="{Binding Credit, StringFormat='N2'}" Width="100"/>
+                    <DataGridTextColumn Header="{loc:Localize accounting.Balance}" Binding="{Binding Balance, StringFormat='N2'}" Width="120" FontWeight="Bold"/>
                 </DataGrid.Columns>
             </DataGrid>
             

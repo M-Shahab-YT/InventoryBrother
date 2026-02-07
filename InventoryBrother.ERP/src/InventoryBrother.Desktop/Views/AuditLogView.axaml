@@ -10,9 +10,9 @@
             <TextBlock Text="{loc:Localize AuditTrail}" FontSize="24" FontWeight="Bold"/>
             
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <TextBox Text="{Binding SearchKey}" Watermark="Search by Table or Action..." Width="300"/>
-                <Button Content="{loc:Localize Search}" Command="{Binding SearchCommand}" Classes="primary"/>
-                <Button Content="{loc:Localize Refresh}" Command="{Binding LoadLogsCommand}"/>
+                <TextBox Text="{Binding SearchKey}" Watermark="{loc:Localize Search}" Width="300" Classes="outline"/>
+                <Button Content="{loc:Localize Search}" Command="{Binding SearchCommand}" Classes="Primary"/>
+                <Button Content="{loc:Localize Refresh}" Command="{Binding LoadLogsCommand}" Classes="Outline"/>
             </StackPanel>
         </StackPanel>
 
@@ -22,12 +22,12 @@
                       IsReadOnly="True"
                       GridLinesVisibility="All">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="180"/>
-                    <DataGridTextColumn Header="Table" Binding="{Binding TableName}" Width="150"/>
-                    <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="100"/>
-                    <DataGridTextColumn Header="Key" Binding="{Binding PrimaryKey}" Width="120"/>
-                    <DataGridTextColumn Header="Old Values" Binding="{Binding OldValues}" Width="*"/>
-                    <DataGridTextColumn Header="New Values" Binding="{Binding NewValues}" Width="*"/>
+                    <DataGridTextColumn Header="{loc:Localize Timestamp}" Binding="{Binding Timestamp}" Width="180"/>
+                    <DataGridTextColumn Header="{loc:Localize Table}" Binding="{Binding TableName}" Width="150"/>
+                    <DataGridTextColumn Header="{loc:Localize Action}" Binding="{Binding Action}" Width="100"/>
+                    <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding PrimaryKey}" Width="120"/>
+                    <DataGridTextColumn Header="{loc:Localize OldValues}" Binding="{Binding OldValues}" Width="*"/>
+                    <DataGridTextColumn Header="{loc:Localize NewValues}" Binding="{Binding NewValues}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

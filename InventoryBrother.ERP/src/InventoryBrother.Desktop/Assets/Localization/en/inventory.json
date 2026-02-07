@@ -1,7 +1,11 @@
 {
     "Title": "Inventory",
-    "AddProduct": "Add Product",
+    "AddProduct": "New Product",
     "ReceiveStock": "Receive Stock",
     "LookupCategories": "Lookup Categories",
-    "LowStockOnly": "Low Stock Only"
+    "LowStockOnly": "Low Stock Only",
+    "CostPrice": "Cost Price",
+    "SalePrice": "Sale Price",
+    "MinStock": "Min Stock",
+    "Category": "Category"
 }

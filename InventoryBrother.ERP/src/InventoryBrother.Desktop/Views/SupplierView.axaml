@@ -3,43 +3,95 @@
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:matIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="InventoryBrother.Desktop.Views.SupplierView"
              x:DataType="vm:SupplierViewModel">
 
     <Grid RowDefinitions="Auto, *">
-        <!-- Header / Search -->
-        <Border Grid.Row="0" Background="White" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="15">
-            <StackPanel Orientation="Horizontal" Spacing="15">
-                <TextBox Width="300" Watermark="Search by name or mobile..." Text="{Binding SearchText}">
-                    <TextBox.KeyBindings>
-                        <KeyBinding Gesture="Enter" Command="{Binding LoadSuppliersCommand}"/>
-                    </TextBox.KeyBindings>
+        <!-- Toolbar / Search -->
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,16">
+            <StackPanel Orientation="Horizontal" Spacing="20">
+                <TextBlock Text="{loc:Localize Suppliers}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                <TextBox MaxWidth="300"
+                         mat:TextFieldAssist.Label="{loc:Localize Search}"
+                         Text="{Binding SearchKey}"
+                         Classes="outline">
+                    <TextBox.InnerRightContent>
+                        <matIcons:MaterialIcon Kind="Magnify" Width="20" Margin="0,0,10,0"/>
+                    </TextBox.InnerRightContent>
                 </TextBox>
-                <Button Content="Search" Classes="accent" Command="{Binding LoadSuppliersCommand}"/>
-                <Button Content="Clear" Command="{Binding ClearSearchCommand}"/>
-                <!-- Add Button Placeholder -->
-                <Button Content="New Supplier" Classes="accent" IsEnabled="False"/>
+
+                <Button Command="{Binding SearchCommand}" Classes="Primary">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <matIcons:MaterialIcon Kind="Magnify" Width="18"/>
+                        <TextBlock Text="{loc:Localize Search}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding NewCommand}" Classes="Primary" Background="#10B981">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <matIcons:MaterialIcon Kind="Plus" Width="18"/>
+                        <TextBlock Text="{loc:Localize AddNew}"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 
-        <!-- Product List -->
-        <Grid Grid.Row="1" Margin="15">
-            <DataGrid ItemsSource="{Binding Suppliers}"
-                      IsReadOnly="True"
-                      GridLinesVisibility="Horizontal"
-                      BorderThickness="1" BorderBrush="LightGray"
-                      CornerRadius="4">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Supplier Name" Binding="{Binding SupplierName}" Width="*"/>
-                    <DataGridTextColumn Header="Mobile Number" Binding="{Binding ContactMobileNo}" Width="150"/>
-                    <DataGridTextColumn Header="Contact Person" Binding="{Binding ContactPerson}" Width="150"/>
-                    <DataGridTextColumn Header="Opening Bal" Binding="{Binding OpeningBalance, StringFormat='N2'}" Width="120"/>
-                    <DataGridTextColumn Header="Address" Binding="{Binding SupplierAddress}" Width="200"/>
-                </DataGrid.Columns>
-            </DataGrid>
+        <!-- Main Content -->
+        <Grid Grid.Row="1" ColumnDefinitions="*, 350">
+            <!-- Supplier List -->
+            <Border Grid.Column="0" Background="White" Margin="10" CornerRadius="8" BoxShadow="0 4 6 -1 #10000000">
+                <DataGrid ItemsSource="{Binding Suppliers}"
+                          SelectedItem="{Binding SelectedSupplier}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{loc:Localize ID}" Binding="{Binding SupplierId}" Width="80"/>
+                        <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding SupplierName}" Width="*"/>
+                        <DataGridTextColumn Header="{loc:Localize hr.Phone}" Binding="{Binding ContactMobileNo}" Width="150"/>
+                        <DataGridTextColumn Header="{loc:Localize hr.Email}" Binding="{Binding ContactEmail}" Width="200"/>
+                        <!-- <DataGridCheckBoxColumn Header="{loc:Localize IsActive}" Binding="{Binding IsActive}" Width="100"/> -->
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
 
-            <ProgressBar IsVisible="{Binding IsBusy}" IsIndeterminate="True" VerticalAlignment="Top"/>
+            <!-- Edit Form -->
+            <Border Grid.Column="1" Background="White" Margin="0,10,10,10" Padding="20" CornerRadius="8" BoxShadow="0 4 6 -1 #10000000">
+                <ScrollViewer>
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="{loc:Localize supplier.Details}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize Name}" Text="{Binding SelectedSupplier.SupplierName}" Classes="outline"/>
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize hr.Phone}" Text="{Binding SelectedSupplier.ContactMobileNo}" Classes="outline"/>
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize hr.Email}" Text="{Binding SelectedSupplier.ContactEmail}" Classes="outline"/>
+                        <TextBox mat:TextFieldAssist.Label="{loc:Localize supplier.Address}" Text="{Binding SelectedSupplier.SupplierAddress}" Classes="outline" AcceptsReturn="True" Height="100"/>
+                        
+                        <!-- <CheckBox Content="{loc:Localize IsActive}" IsChecked="{Binding SelectedSupplier.IsActive}"/> -->
+
+                        <Panel Height="20"/>
+
+                        <Button Command="{Binding SaveCommand}" Classes="Primary" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <matIcons:MaterialIcon Kind="ContentSave" Width="18"/>
+                                <TextBlock Text="{loc:Localize hr.Save}"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Button Command="{Binding DeleteCommand}" Classes="Outline" HorizontalAlignment="Stretch" BorderBrush="#EF4444" Foreground="#EF4444">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <matIcons:MaterialIcon Kind="Delete" Width="18"/>
+                                <TextBlock Text="{loc:Localize hr.Delete}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
         </Grid>
+        
+        <ProgressBar Grid.Row="1" IsVisible="{Binding IsBusy}" IsIndeterminate="True" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

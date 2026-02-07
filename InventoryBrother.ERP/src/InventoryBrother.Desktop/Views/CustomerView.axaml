@@ -3,6 +3,8 @@
              xmlns:vm="using:InventoryBrother.Desktop.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:loc="using:InventoryBrother.Desktop.Extensions"
+             xmlns:mat="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="InventoryBrother.Desktop.Views.CustomerView"
              x:DataType="vm:CustomerViewModel">
@@ -11,15 +13,15 @@
         <!-- Header / Search -->
         <Border Grid.Row="0" Background="White" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="15">
             <StackPanel Orientation="Horizontal" Spacing="15">
-                <TextBox Width="300" Watermark="Search by name or mobile..." Text="{Binding SearchText}">
+                <TextBox Width="300" Watermark="{loc:Localize Search}" Text="{Binding SearchText}" Classes="outline">
                     <TextBox.KeyBindings>
                         <KeyBinding Gesture="Enter" Command="{Binding LoadCustomersCommand}"/>
                     </TextBox.KeyBindings>
                 </TextBox>
-                <Button Content="Search" Classes="accent" Command="{Binding LoadCustomersCommand}"/>
-                <Button Content="Clear" Command="{Binding ClearSearchCommand}"/>
+                <Button Content="{loc:Localize Search}" Classes="Primary" Command="{Binding LoadCustomersCommand}"/>
+                <Button Content="{loc:Localize Clear}" Command="{Binding ClearSearchCommand}" Classes="Outline"/>
                 <!-- Add Button Placeholder -->
-                <Button Content="New Customer" Classes="accent" IsEnabled="False"/>
+                <Button Content="{loc:Localize NewCustomer}" Classes="Primary" IsEnabled="False"/>
             </StackPanel>
         </Border>
 
@@ -31,10 +33,10 @@
                       BorderThickness="1" BorderBrush="LightGray"
                       CornerRadius="4">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="*"/>
-                    <DataGridTextColumn Header="Mobile Number" Binding="{Binding MobileNumber}" Width="150"/>
-                    <DataGridTextColumn Header="Contact Person" Binding="{Binding ContactPerson}" Width="150"/>
-                    <DataGridTextColumn Header="Address" Binding="{Binding CustomerAddress}" Width="200"/>
+                    <DataGridTextColumn Header="{loc:Localize Name}" Binding="{Binding CustomerName}" Width="*"/>
+                    <DataGridTextColumn Header="{loc:Localize Mobile}" Binding="{Binding MobileNumber}" Width="150"/>
+                    <DataGridTextColumn Header="{loc:Localize ContactPerson}" Binding="{Binding ContactPerson}" Width="150"/>
+                    <DataGridTextColumn Header="{loc:Localize Address}" Binding="{Binding CustomerAddress}" Width="200"/>
                 </DataGrid.Columns>
             </DataGrid>
 
