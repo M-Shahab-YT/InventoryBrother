@@ -15,6 +15,48 @@
       "when": 1770464215726,
       "tag": "0001_awesome_mother_askani",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1770464874038,
+      "tag": "0002_illegal_drax",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1770466034945,
+      "tag": "0003_illegal_master_mold",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1770466700966,
+      "tag": "0004_married_gorilla_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1770466903970,
+      "tag": "0005_aberrant_nomad",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1770467103473,
+      "tag": "0006_brave_captain_cross",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1770467229584,
+      "tag": "0007_clean_sandman",
+      "breakpoints": true
     }
   ]
 }

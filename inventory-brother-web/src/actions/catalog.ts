@@ -13,12 +13,12 @@ export async function getBrands() {
 export async function createBrand(formData: FormData) {
   const name = formData.get("name") as string
   await db.insert(brands).values({ name })
-  revalidatePath("/dashboard/catalog/brands")
+  revalidatePath("/catalog/brands")
 }
 
 export async function deleteBrand(id: number) {
   await db.delete(brands).where(eq(brands.id, id))
-  revalidatePath("/dashboard/catalog/brands")
+  revalidatePath("/catalog/brands")
 }
 
 // Units
@@ -29,12 +29,12 @@ export async function getUnits() {
 export async function createUnit(formData: FormData) {
   const name = formData.get("name") as string
   await db.insert(units).values({ name })
-  revalidatePath("/dashboard/catalog/units")
+  revalidatePath("/catalog/units")
 }
 
 export async function deleteUnit(id: number) {
   await db.delete(units).where(eq(units.id, id))
-  revalidatePath("/dashboard/catalog/units")
+  revalidatePath("/catalog/units")
 }
 
 // Categories
@@ -46,10 +46,10 @@ export async function createCategory(formData: FormData) {
   const name = formData.get("name") as string
   const parentId = formData.get("parentId") ? parseInt(formData.get("parentId") as string) : undefined
   await db.insert(categories).values({ name, parentId })
-  revalidatePath("/dashboard/catalog/categories")
+  revalidatePath("/catalog/categories")
 }
 
 export async function deleteCategory(id: number) {
   await db.delete(categories).where(eq(categories.id, id))
-  revalidatePath("/dashboard/catalog/categories")
+  revalidatePath("/catalog/categories")
 }

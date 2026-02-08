@@ -1,0 +1,82 @@
+import { Link } from '@/i18n/navigation' // We need to setup navigation wrapper or use next/link if i18n not fully setup
+import { Button } from "@/components/ui/button"
+import {
+    LayoutDashboard,
+    Package,
+    Tags,
+    Ruler,
+    Settings,
+    LogOut,
+    Sliders,
+    Users,
+    ShoppingCart,
+    Users2,
+    Calculator,
+    BarChart3
+} from "lucide-react"
+
+// Simple mock navigation for now. 
+// In a real app, this would be in a config file and verified against permissions.
+const navItems = [
+    { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { href: "/dashboard/catalog/products", icon: Package, label: "Products" },
+    { href: "/dashboard/catalog/brands", icon: Tags, label: "Brands" },
+    { href: "/dashboard/catalog/categories", icon: Package, label: "Categories" },
+    { href: "/dashboard/inventory/warehouses", icon: Package, label: "Warehouses" },
+    { href: "/dashboard/inventory/adjustments", icon: Sliders, label: "Adjustments" },
+    { href: "/dashboard/inventory/suppliers", icon: Users, label: "Suppliers" }, // Suppliers
+    { href: "/dashboard/purchasing/orders", icon: ShoppingCart, label: "Purchasing" },
+    { href: "/dashboard/sales/customers", icon: Users2, label: "Customers" },
+    { href: "/dashboard/sales/history", icon: ShoppingCart, label: "Sales History" },
+    { href: "/dashboard/finance/accounts", icon: Calculator, label: "Chart of Accounts" },
+    { href: "/dashboard/finance/journal", icon: Calculator, label: "Journal" },
+    { href: "/dashboard/finance/ledger", icon: Calculator, label: "General Ledger" },
+    { href: "/dashboard/finance/reports", icon: BarChart3, label: "Financial Reports" },
+    { href: "/dashboard/hr/employees", icon: Users2, label: "Employees" },
+    { href: "/dashboard/hr/attendance", icon: Calculator, label: "Attendance" },
+    { href: "/dashboard/hr/payroll", icon: Calculator, label: "Payroll" },
+    { href: "/pos", icon: Calculator, label: "POS" },
+]
+
+export default function DashboardLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <div className="flex h-screen bg-muted/40">
+            {/* Sidebar */}
+            <aside className="hidden w-64 flex-col border-r bg-background sm:flex">
+                <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                    <Link href="/" className="flex items-center gap-2 font-semibold">
+                        <Package className="h-6 w-6" />
+                        <span className="">Inv. Brother</span>
+                    </Link>
+                </div>
+                <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-1 mt-4">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted"
+                        >
+                            <item.icon className="h-4 w-4" />
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+                <div className="mt-auto p-4 border-t">
+                    <Button variant="outline" className="w-full justify-start gap-2">
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                    </Button>
+                </div>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
+                {children}
+            </main>
+        </div>
+    )
+}
